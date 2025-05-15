@@ -1,0 +1,69 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Customer;
+use Illuminate\Http\Request;
+
+class CustomerController extends Controller
+{
+    public function customer_list()
+    {
+        $customers = Customer::latest()->get();
+        return view('customer.customer-list', compact('customers'));
+    }
+
+    public function customer_create()
+    {
+        return view('customer.customer-add');
+    }
+
+    public function customer_store(Request $request)
+    {
+        $validated = $request->validate([
+            'customer_name' => 'required|string|max:255',
+            'customer_mobile' => 'nullable|string|max:10',
+            'customer_email' => 'nullable|email|max:255',
+        ]);
+
+        $data = Customer::create([
+            'customer_name' => $validated['customer_name'],
+            'customer_mobile' => $validated['customer_mobile'],
+            'customer_email' => $validated['customer_email'],
+        ]);
+        // dd($data);
+        return redirect()->route('admin.customer_list')->with('success', 'Customer added successfully!');
+    }
+
+    public function customer_edit($id)
+    {
+        $customer = Customer::findOrFail($id);
+        return view('customer.customer-edit', compact('customer'));
+    }
+
+    public function customer_update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'customer_name' => 'required|string|max:255',
+            'customer_mobile' => 'nullable|string|max:10',
+            'customer_email' => 'nullable|email|max:255',
+        ]);
+
+        $customer = Customer::findOrFail($id);
+        $customer->update([
+            'customer_name' => $validated['customer_name'],
+            'customer_mobile' => $validated['customer_mobile'],
+            'customer_email' => $validated['customer_email'],
+        ]);
+
+        return redirect()->route('admin.customer_list')->with('success_update', 'Customer updated successfully!');
+    }
+
+    public function customer_delete($id)
+    {
+        $customer = Customer::findOrFail($id);
+        $customer->delete();
+
+        return redirect()->route('admin.customer_list')->with('success_delete', 'Customer deleted successfully!');
+    }
+}
