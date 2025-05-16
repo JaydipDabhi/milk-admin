@@ -38,13 +38,13 @@
                                 <p>User List</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{ route('admin.user_create') }}"
                                 class="nav-link {{ request()->routeIs('admin.user_create') ? 'active' : '' }}">
                                 <i class="fas fa-user-plus nav-icon"></i>
                                 <p>Add New User</p>
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </li>
 
@@ -72,13 +72,13 @@
                                 <p>Customer List</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{ route('admin.customer_create') }}"
                                 class="nav-link {{ request()->routeIs('admin.customer_create') ? 'active' : '' }}">
                                 <i class="fas fa-user-plus nav-icon"></i>
                                 <p>Add New Customer</p>
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </li>
 
