@@ -57,3 +57,96 @@ $(function () {
         format: "L",
     });
 });
+
+jQuery(document).ready(function () {
+    jQuery("#userForm").validate({
+        rules: {
+            name: {
+                required: true,
+                minlength: 2,
+            },
+            email: {
+                required: true,
+                email: true,
+            },
+            mobile: {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10,
+            },
+            role: {
+                required: true,
+            },
+            password: {
+                required: true,
+                minlength: 6,
+            },
+            password_confirmation: {
+                required: true,
+                equalTo: "#exampleInputPassword1",
+            },
+        },
+        messages: {
+            name: {
+                required: "Please enter a name",
+                minlength: "Name must be at least 2 characters",
+            },
+            email: {
+                required: "Please enter an email",
+                email: "Please enter a valid email address",
+            },
+            mobile: {
+                required: "Please enter a mobile number",
+                digits: "Only numeric values allowed",
+                minlength: "Mobile number must be at least 10 digits",
+                maxlength: "Mobile number can't exceed 10 digits",
+            },
+            role: {
+                required: "Please select a role",
+            },
+            password: {
+                required: "Please enter a password",
+                minlength: "Password must be at least 6 characters",
+            },
+            password_confirmation: {
+                required: "Please confirm your password",
+                equalTo: "Passwords do not match",
+            },
+        },
+        errorElement: "div",
+        errorPlacement: function (error, element) {
+            error.addClass("text-danger");
+            if (element.hasClass("select2-hidden-accessible")) {
+                error.insertAfter(element.next(".select2"));
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        highlight: function (element) {
+            if ($(element).hasClass("select2-hidden-accessible")) {
+                $(element)
+                    .next(".select2")
+                    .find(".select2-selection")
+                    .addClass("is-invalid");
+            } else {
+                $(element).addClass("is-invalid");
+            }
+        },
+        unhighlight: function (element) {
+            if ($(element).hasClass("select2-hidden-accessible")) {
+                $(element)
+                    .next(".select2")
+                    .find(".select2-selection")
+                    .removeClass("is-invalid");
+            } else {
+                $(element).removeClass("is-invalid");
+            }
+        },
+    });
+
+    // Re-validate role field on change (important for Select2)
+    $("#exampleInputRole1").on("change", function () {
+        $(this).valid();
+    });
+});

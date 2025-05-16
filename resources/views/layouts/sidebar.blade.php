@@ -34,7 +34,7 @@
                         <li class="nav-item">
                             <a href="{{ route('admin.user_list') }}"
                                 class="nav-link {{ request()->routeIs('admin.user_list', 'admin.user_edit') ? 'active' : '' }}">
-                                <i class="fas fa-user nav-icon"></i>
+                                <i class="fas fa-list nav-icon"></i>
                                 <p>User List</p>
                             </a>
                         </li>
@@ -58,7 +58,7 @@
                 @endphp
                 <li class="nav-item {{ $customerMenuOpen ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ $customerMenuOpen ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-users"></i>
+                        <i class="nav-icon fas fa-address-book"></i>
                         <p>
                             All Customers
                             <i class="right fas fa-angle-left"></i>
@@ -68,7 +68,7 @@
                         <li class="nav-item">
                             <a href="{{ route('admin.customer_list') }}"
                                 class="nav-link {{ request()->routeIs('admin.customer_list', 'admin.customer_edit') ? 'active' : '' }}">
-                                <i class="fas fa-user nav-icon"></i>
+                                <i class="fas fa-list nav-icon"></i>
                                 <p>Customer List</p>
                             </a>
                         </li>
@@ -82,22 +82,22 @@
                     </ul>
                 </li>
 
-                {{-- Customers Menu --}}
+                {{-- Milk Collection --}}
                 <li class="nav-item ">
                     <a href="javascript:void(0);" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
+                        <i class="nav-icon fas fa-clipboard-list"></i>
                         <p>Milk Collection<i class="right fas fa-angle-left"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="" class="nav-link">
-                                <i class="fas fa-user nav-icon"></i>
+                                <i class="fas fa-list nav-icon"></i>
                                 <p>Milk Collection List</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="" class="nav-link">
-                                <i class="fas fa-user-plus nav-icon"></i>
+                                <i class="fas fa-plus-circle nav-icon"></i>
                                 <p>Milk Collection Add</p>
                             </a>
                         </li>

@@ -25,7 +25,7 @@
                             <div class="card-header">
                                 <h3 class="card-title">Add New User</h3>
                             </div>
-                            <form method="POST" action="{{ route('admin.user_store') }}">
+                            <form method="POST" action="{{ route('admin.user_store') }}" id="userForm">
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group">
@@ -57,8 +57,9 @@
 
                                     <div class="form-group">
                                         <label>Role</label>
-                                        <select class="form-control select2" style="width: 100%;" name="role">
-                                            <option selected="selected">Select Role</option>
+                                        <select class="form-control select2" style="width: 100%;" name="role"
+                                            id="exampleInputRole1">
+                                            <option value="">Select Role</option>
                                             @foreach ($roles as $role)
                                                 <option value="{{ $role }}"
                                                     {{ old('role') == $role ? 'selected' : '' }}>
