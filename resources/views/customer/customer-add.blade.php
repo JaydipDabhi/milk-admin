@@ -25,7 +25,7 @@
                             <div class="card-header">
                                 <h3 class="card-title">Add New Customer</h3>
                             </div>
-                            <form method="POST" action="{{ route('admin.customer_store') }}">
+                            <form method="POST" action="{{ route('admin.customer_store') }}" id="customerForm">
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group">

@@ -149,4 +149,30 @@ jQuery(document).ready(function () {
     $("#exampleInputRole1").on("change", function () {
         $(this).valid();
     });
+
+    $("#customerForm").validate({
+        rules: {
+            customer_name: {
+                required: true,
+                minlength: 2,
+            },
+        },
+        messages: {
+            customer_name: {
+                required: "Please enter customer name",
+                minlength: "Name must be at least 2 characters",
+            },
+        },
+        errorElement: "span",
+        errorPlacement: function (error, element) {
+            error.addClass("text-danger");
+            element.closest(".form-group").append(error);
+        },
+        highlight: function (element) {
+            $(element).addClass("is-invalid");
+        },
+        unhighlight: function (element) {
+            $(element).removeClass("is-invalid");
+        },
+    });
 });
