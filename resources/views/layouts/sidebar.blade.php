@@ -83,6 +83,27 @@
                 </li>
 
                 {{-- Customers Menu --}}
+                <li class="nav-item ">
+                    <a href="javascript:void(0);" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Milk Collection<i class="right fas fa-angle-left"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="fas fa-user nav-icon"></i>
+                                <p>Milk Collection List</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="fas fa-user-plus nav-icon"></i>
+                                <p>Milk Collection Add</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 {{-- <li class="nav-item ">
                     <a href="javascript:void(0);" class="nav-link">
                         <i class="nav-icon fas fa-users"></i>

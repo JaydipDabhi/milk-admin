@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\MilkCollectionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -37,3 +38,5 @@ Route::prefix('customer')->name('admin.')->group(function () {
     Route::put('/update/{id}', [CustomerController::class, 'customer_update'])->name('customer_update');
     Route::delete('/delete/{id}', [CustomerController::class, 'customer_delete'])->name('customer_delete');
 });
+
+// Milk Collection

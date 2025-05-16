@@ -51,3 +51,9 @@ function confirmCustomerDelete(customerId) {
         }
     });
 }
+
+$(function () {
+    $("#reservationdate").datetimepicker({
+        format: "L",
+    });
+});
