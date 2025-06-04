@@ -82,23 +82,23 @@
                     </ul>
                 </li>
 
-                {{-- Milk Collection --}}
+                {{-- Milk Delivery --}}
                 <li class="nav-item ">
                     <a href="javascript:void(0);" class="nav-link">
                         <i class="nav-icon fas fa-clipboard-list"></i>
-                        <p>Milk Collection<i class="right fas fa-angle-left"></i></p>
+                        <p>Milk Delivery<i class="right fas fa-angle-left"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="javascript:void(0);" class="nav-link">
                                 <i class="fas fa-list nav-icon"></i>
-                                <p>Milk Collection List</p>
+                                <p>Milk Delivery List</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="javascript:void(0);" class="nav-link">
                                 <i class="fas fa-plus-circle nav-icon"></i>
-                                <p>Milk Collection Add</p>
+                                <p>Milk Delivery Add</p>
                             </a>
                         </li>
                     </ul>
