@@ -51,6 +51,21 @@ function confirmCustomerDelete(customerId) {
         }
     });
 }
+function confirmRateDelete(rateId) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "This Rate will be permanently deleted!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById("delete-form-" + rateId).submit();
+        }
+    });
+}
 
 $(function () {
     $("#reservationdate").datetimepicker({
@@ -174,5 +189,73 @@ jQuery(document).ready(function () {
         unhighlight: function (element) {
             $(element).removeClass("is-invalid");
         },
+    });
+
+    // jQuery("#customer_id").on("input", function () {
+    //     let customerId = jQuery(this).val();
+    //     if (customerId.length > 0) {
+    //         $.ajax({
+    //             url: "/milk-delivery/get-customer-info",
+    //             type: "GET",
+    //             data: {
+    //                 _token: "{{ csrf_token() }}",
+    //                 customer_id: customerId,
+    //             },
+    //             success: function (response) {
+    //                 jQuery("#customer_name")
+    //                     .text(response.name)
+    //                     .removeClass("text-danger")
+    //                     .addClass("text-success");
+    //             },
+    //             error: function (xhr) {
+    //                 if (xhr.status === 404) {
+    //                     jQuery("#customer_name")
+    //                         .text("Customer not found")
+    //                         .removeClass("text-success")
+    //                         .addClass("text-danger");
+    //                 } else {
+    //                     jQuery("#customer_name")
+    //                         .text("Error fetching customer info")
+    //                         .removeClass("text-success")
+    //                         .addClass("text-danger");
+    //                 }
+    //             },
+    //         });
+    //     } else {
+    //         jQuery("#customer_name").text("");
+    //     }
+    // });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Auto-select time
+    const morning = document.getElementById("morning");
+    const evening = document.getElementById("evening");
+
+    // Auto-select time based on current hour
+    const hour = new Date().getHours();
+    if (hour < 12) {
+        morning.checked = true;
+        evening.disabled = true;
+    } else {
+        evening.checked = true;
+        morning.disabled = true;
+    }
+
+    // Disable the other option when one is selected
+    morning.addEventListener("change", function () {
+        if (morning.checked) {
+            evening.disabled = true;
+        } else {
+            evening.disabled = false;
+        }
+    });
+
+    evening.addEventListener("change", function () {
+        if (evening.checked) {
+            morning.disabled = true;
+        } else {
+            morning.disabled = false;
+        }
     });
 });

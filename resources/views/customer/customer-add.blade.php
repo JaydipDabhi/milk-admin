@@ -40,6 +40,24 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label for="customer_type">Customer Type</label>
+                                        <select class="form-control select2 @error('customer_type') is-invalid @enderror"
+                                            id="customer_type" name="customer_type">
+                                            <option value="">-- Select Customer Type --</option>
+                                            @foreach ($rateTypes as $type)
+                                                <option value="{{ $type }}"
+                                                    {{ old('customer_type') == $type ? 'selected' : '' }}>
+                                                    {{ ucfirst($type) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('customer_type')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+
+                                    <div class="form-group">
                                         <label for="customerMobile">Customer Mobile Number</label>
                                         <input type="tel" class="form-control" id="customerMobile"
                                             name="customer_mobile" placeholder="Enter Customer Mobile Number"

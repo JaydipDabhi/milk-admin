@@ -40,6 +40,7 @@
 
     <!-- REQUIRED SCRIPTS -->
     @include('layouts.js')
+    @stack('scripts')
 </body>
 
 </html>

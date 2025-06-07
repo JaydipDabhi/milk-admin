@@ -1,17 +1,17 @@
 @extends('layouts.index')
-@section('title', 'Customer List')
+@section('title', 'Rates List')
 @section('content')
     <div class="content-wrapper">
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Customer List</h1>
+                        <h1>Rates List</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Home</a></li>
-                            <li class="breadcrumb-item active">Customer List</li>
+                            <li class="breadcrumb-item active">Rates List</li>
                         </ol>
                     </div>
                 </div>
@@ -43,12 +43,12 @@
                             <div class="card-header">
                                 <div class="row w-100 align-items-center">
                                     <div class="col-12 col-md-6 mb-2 mb-md-0">
-                                        <h3 class="card-title mb-0">Customer List</h3>
+                                        <h3 class="card-title mb-0">Rates List</h3>
                                     </div>
 
                                     <div class="col-12 col-md-6 text-md-right text-left">
-                                        <a href="{{ route('admin.customer_create') }}" class="btn btn-primary">
-                                            <i class="fas fa-user-plus mr-1"></i> Add New Customer
+                                        <a href="{{ route('admin.add_rate') }}" class="btn btn-primary">
+                                            <i class="fas fa-user-plus mr-1"></i> Add Rate
                                         </a>
                                     </div>
                                 </div>
@@ -58,34 +58,32 @@
                                     <thead>
                                         <tr>
                                             <th>Sr No.</th>
-                                            <th>Customer Name</th>
-                                            <th>Customer Type</th>
-                                            <th>Mobile Number</th>
-                                            <th>Email</th>
+                                            <th>Rate Type</th>
+                                            <th>Rate</th>
+                                            <th>Created At</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($customers as $customer)
+                                        @foreach ($rates as $rate)
                                             <tr>
-                                                <td>{{ $customer->id }}</td>
-                                                <td>{{ $customer->customer_name }}</td>
-                                                <td>{{ $customer->customer_type }}</td>
-                                                <td>{{ $customer->customer_mobile }}</td>
-                                                <td>{{ $customer->customer_email }}</td>
+                                                <td>{{ $rate->id }}</td>
+                                                <td>{{ ucfirst($rate->rate_type) }}</td>
+                                                <td>{{ number_format($rate->rate, 2) }}</td>
+                                                <td>{{ $rate->created_at->format('d-m-Y') }}</td>
                                                 <td>
-                                                    <a href="{{ route('admin.customer_edit', $customer->id) }}"
+                                                    <a href="{{ route('admin.rate_edit', $rate->id) }}"
                                                         class="text-primary mr-2">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
-                                                    <form action="{{ route('admin.customer_delete', $customer->id) }}"
+                                                    <form action="{{ route('admin.rate_delete', $rate->id) }}"
                                                         method="POST" class="d-inline"
-                                                        id="delete-form-{{ $customer->id }}">
+                                                        id="delete-form-{{ $rate->id }}">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="button"
                                                             class="btn btn-link text-danger p-0 m-0 align-baseline"
-                                                            onclick="confirmCustomerDelete({{ $customer->id }})">
+                                                            onclick="confirmRateDelete({{ $rate->id }})">
                                                             <i class="fas fa-trash-alt"></i>
                                                         </button>
                                                     </form>
@@ -96,10 +94,9 @@
                                     <tfoot>
                                         <tr>
                                             <th>Sr No.</th>
-                                            <th>Customer Name</th>
-                                            <th>Customer Type</th>
-                                            <th>Mobile Number</th>
-                                            <th>Email</th>
+                                            <th>Rate Type</th>
+                                            <th>Rate</th>
+                                            <th>Created At</th>
                                             <th>Action</th>
                                         </tr>
                                     </tfoot>

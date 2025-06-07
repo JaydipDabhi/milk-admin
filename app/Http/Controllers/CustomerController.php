@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\RateMaster;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -15,19 +16,22 @@ class CustomerController extends Controller
 
     public function customer_create()
     {
-        return view('customer.customer-add');
+        $rateTypes = RateMaster::select('rate_type')->distinct()->pluck('rate_type');
+        return view('customer.customer-add', compact('rateTypes'));
     }
 
     public function customer_store(Request $request)
     {
         $validated = $request->validate([
             'customer_name' => 'required|string|max:255',
+            'customer_type' => 'required|string|max:255',
             'customer_mobile' => 'nullable|string|max:10',
             'customer_email' => 'nullable|email|max:255',
         ]);
 
         $data = Customer::create([
             'customer_name' => $validated['customer_name'],
+            'customer_type' => $validated['customer_type'],
             'customer_mobile' => $validated['customer_mobile'],
             'customer_email' => $validated['customer_email'],
         ]);
@@ -38,13 +42,15 @@ class CustomerController extends Controller
     public function customer_edit($id)
     {
         $customer = Customer::findOrFail($id);
-        return view('customer.customer-edit', compact('customer'));
+        $rateTypes = RateMaster::select('rate_type')->distinct()->pluck('rate_type');
+        return view('customer.customer-edit', compact('customer', 'rateTypes'));
     }
 
     public function customer_update(Request $request, $id)
     {
         $validated = $request->validate([
             'customer_name' => 'required|string|max:255',
+            'customer_type' => 'required|string|max:255',
             'customer_mobile' => 'nullable|string|max:10',
             'customer_email' => 'nullable|email|max:255',
         ]);
@@ -52,6 +58,7 @@ class CustomerController extends Controller
         $customer = Customer::findOrFail($id);
         $customer->update([
             'customer_name' => $validated['customer_name'],
+            'customer_type' => $validated['customer_type'],
             'customer_mobile' => $validated['customer_mobile'],
             'customer_email' => $validated['customer_email'],
         ]);

@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\MilkCollectionController;
+use App\Http\Controllers\MilkDeliveryController;
+use App\Http\Controllers\RateMasterController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -14,12 +15,6 @@ Route::post('/login', [AdminController::class, 'loginuser'])->name('admin.loginu
 Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
 // User create
-// Route::get('/user-list', [AdminController::class, 'user_list'])->name('admin.user_list');
-// Route::get('/users/create', [AdminController::class, 'user_create'])->name('admin.user_create');
-// Route::post('/users/store', [AdminController::class, 'user_store'])->name('admin.user_store');
-// Route::get('/users/edit/{id}', [AdminController::class, 'user_edit'])->name('admin.user_edit');
-// Route::post('/users/update/{id}', [AdminController::class, 'user_update'])->name('admin.user_update');
-// Route::delete('/users/delete/{id}', [AdminController::class, 'user_delete'])->name('admin.user_delete');
 Route::prefix('users')->name('admin.')->group(function () {
     Route::get('/list', [AdminController::class, 'user_list'])->name('user_list');
     Route::get('/create', [AdminController::class, 'user_create'])->name('user_create');
@@ -39,4 +34,18 @@ Route::prefix('customer')->name('admin.')->group(function () {
     Route::delete('/delete/{id}', [CustomerController::class, 'customer_delete'])->name('customer_delete');
 });
 
-// Milk Collection
+// Milk Delivery
+Route::prefix('milk-delivery')->name('admin.')->group(function () {
+    Route::get('/create', [MilkDeliveryController::class, 'milk_delivery'])->name('milk_delivery');
+    Route::get('/get-customer-info', [MilkDeliveryController::class, 'getCustomerInfo'])->name('get.customer.info');
+});
+
+// Rate Master
+Route::prefix('rate')->name('admin.')->group(function () {
+    Route::get('/create', [RateMasterController::class, 'add_rate'])->name('add_rate');
+    Route::post('/store', [RateMasterController::class, 'rate_store'])->name('rate_store');
+    Route::get('/list', [RateMasterController::class, 'rate_list'])->name('rate_list');
+    Route::get('/edit/{id}', [RateMasterController::class, 'rate_edit'])->name('rate_edit');
+    Route::put('/update/{id}', [RateMasterController::class, 'rate_update'])->name('rate_update');
+    Route::delete('/delete/{id}', [RateMasterController::class, 'rate_delete'])->name('rate_delete');
+});

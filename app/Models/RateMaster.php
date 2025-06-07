@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Customer extends Model
+class RateMaster extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'customer_name',
-        'customer_type',
-        'customer_mobile',
-        'customer_email',
+        'rate_type',
+        'rate',
     ];
+
+    protected $table = 'rate_master';
 }

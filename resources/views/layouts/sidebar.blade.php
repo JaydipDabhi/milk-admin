@@ -38,13 +38,6 @@
                                 <p>User List</p>
                             </a>
                         </li>
-                        {{-- <li class="nav-item">
-                            <a href="{{ route('admin.user_create') }}"
-                                class="nav-link {{ request()->routeIs('admin.user_create') ? 'active' : '' }}">
-                                <i class="fas fa-user-plus nav-icon"></i>
-                                <p>Add New User</p>
-                            </a>
-                        </li> --}}
                     </ul>
                 </li>
 
@@ -72,13 +65,6 @@
                                 <p>Customer List</p>
                             </a>
                         </li>
-                        {{-- <li class="nav-item">
-                            <a href="{{ route('admin.customer_create') }}"
-                                class="nav-link {{ request()->routeIs('admin.customer_create') ? 'active' : '' }}">
-                                <i class="fas fa-user-plus nav-icon"></i>
-                                <p>Add New Customer</p>
-                            </a>
-                        </li> --}}
                     </ul>
                 </li>
 
@@ -96,9 +82,29 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="javascript:void(0);" class="nav-link">
+                            <a href="{{ route('admin.milk_delivery') }}" class="nav-link">
                                 <i class="fas fa-plus-circle nav-icon"></i>
                                 <p>Milk Delivery Add</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                {{-- Rate Master --}}
+                @php
+                    $RateMenuOpen = request()->routeIs('admin.add_rate', 'admin.rate_list', 'admin.rate_edit');
+                @endphp
+                <li class="nav-item {{ $RateMenuOpen ? 'menu-open' : '' }}">
+                    <a href="javascript:void(0);" class="nav-link {{ $RateMenuOpen ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-rupee-sign"></i>
+                        <p>Rate Master<i class="right fas fa-angle-left"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.rate_list') }}"
+                                class="nav-link {{ request()->routeIs('admin.rate_list', 'admin.rate_edit') ? 'active' : '' }}">
+                                <i class="fas fa-list nav-icon"></i>
+                                <p>Rate List</p>
                             </a>
                         </li>
                     </ul>
