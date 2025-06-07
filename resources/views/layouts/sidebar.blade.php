@@ -76,15 +76,9 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="javascript:void(0);" class="nav-link">
+                            <a href="{{ route('admin.milk_delivery_list') }}" class="nav-link">
                                 <i class="fas fa-list nav-icon"></i>
                                 <p>Milk Delivery List</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.milk_delivery') }}" class="nav-link">
-                                <i class="fas fa-plus-circle nav-icon"></i>
-                                <p>Milk Delivery Add</p>
                             </a>
                         </li>
                     </ul>

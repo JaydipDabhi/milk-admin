@@ -19,38 +19,65 @@
         </section>
         <section class="content">
             <div class="container-fluid">
+                @php
+                    $alerts = [
+                        'error' => 'error',
+                        'success' => 'success',
+                    ];
+                @endphp
+
+                @foreach ($alerts as $key => $type)
+                    @if (session($key))
+                        <div class="alert alert-{{ $type }} alert-dismissible fade show" role="alert">
+                            {{ session($key) }}
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        </div>
+                    @endif
+                @endforeach
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card card-primary">
                             <div class="card-header">
                                 <h3 class="card-title">Add Milk Delivery</h3>
                             </div>
-                            <form method="POST" action="#">
+                            <form method="POST" action="{{ route('admin.admin.milk_delivery_store') }}" id="milkAddForm">
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="customer_id">Customer Number</label>
-                                        <input type="number" class="form-control" id="customer_id" name="customer_id"
-                                            placeholder="Enter Customer Number">
+                                        <input type="number"
+                                            class="form-control @error('customer_id') is-invalid @enderror" id="customer_id"
+                                            name="customer_id" placeholder="Enter Customer Number">
                                         <div id="customer_name" class="text-success font-weight-bold mt-2"></div>
+                                        @error('customer_id')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
                                     <div class="form-group">
                                         <label for="weight">Weight (in liters)</label>
-                                        <input type="number" class="form-control" id="weight" name="weight"
-                                            placeholder="Enter Weight (in liters)" step="0.1" min="0">
+                                        <input type="number" class="form-control @error('weight') is-invalid @enderror"
+                                            id="weight" name="weight" placeholder="Enter Weight (in liters)"
+                                            step="0.1" min="0">
+                                        @error('weight')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
                                     <div class="form-group">
                                         <label for="type">Type (Cow/Buffalo)</label>
-                                        <input type="text" class="form-control" id="type" name="type"
-                                            placeholder="Cow" disabled>
+                                        <input type="text" class="form-control" id="type" name="type" disabled>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="rate">Rate</label>
-                                        <input type="text" class="form-control" id="rate" name="rate"
-                                            placeholder="60 / Liter" disabled>
+                                        <input type="text" class="form-control" id="rate" name="rate" disabled>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="total_rate">Total Rate</label>
+                                        <input type="text" class="form-control" id="total_rate" name="total_rate"
+                                            disabled>
                                     </div>
 
                                     <div class="form-group">
@@ -81,8 +108,9 @@
 @push('scripts')
     <script>
         jQuery(document).ready(function() {
+            let rate = 0;
             jQuery("#customer_id").on("input", function() {
-                let customerId = jQuery(this).val();
+                let customerId = jQuery(this).val().trim();
                 if (customerId.length > 0) {
                     $.ajax({
                         url: "{{ route('admin.get.customer.info') }}",
@@ -92,29 +120,39 @@
                             customer_id: customerId,
                         },
                         success: function(response) {
-                            jQuery("#customer_name")
-                                .text(response.name)
-                                .removeClass("text-danger")
+                            $("#customer_name").text(response.name).removeClass("text-danger")
                                 .addClass("text-success");
+                            $("#type").val(response.type);
+                            $("#rate").val(response.rate);
+                            rate = parseFloat(response.rate) || 0;
+                            $("#rate-section").show();
+                            calculateTotal();
                         },
                         error: function(xhr) {
-                            if (xhr.status === 404) {
-                                jQuery("#customer_name")
-                                    .text("Customer not found")
-                                    .removeClass("text-success")
-                                    .addClass("text-danger");
-                            } else {
-                                jQuery("#customer_name")
-                                    .text("Error fetching customer info")
-                                    .removeClass("text-success")
-                                    .addClass("text-danger");
-                            }
+                            $("#customer_name").text("Customer not found").removeClass(
+                                "text-success").addClass("text-danger");
+                            $("#type, #rate, #total_rate, #weight").val("");
+                            $("#rate-section").hide();
+                            rate = 0;
                         },
                     });
                 } else {
-                    jQuery("#customer_name").text("");
+                    $("#customer_name").text("");
+                    $("#type, #rate, #total_rate, #weight").val("");
+                    $("#rate-section").hide();
+                    rate = 0;
                 }
             });
+
+            jQuery("#weight").on("input", function() {
+                calculateTotal();
+            });
+
+            function calculateTotal() {
+                let weight = parseFloat($("#weight").val()) || 0;
+                let total = rate * weight;
+                $("#total_rate").val(total.toFixed(2));
+            }
         });
     </script>
 @endpush

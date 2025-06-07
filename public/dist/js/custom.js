@@ -190,41 +190,6 @@ jQuery(document).ready(function () {
             $(element).removeClass("is-invalid");
         },
     });
-
-    // jQuery("#customer_id").on("input", function () {
-    //     let customerId = jQuery(this).val();
-    //     if (customerId.length > 0) {
-    //         $.ajax({
-    //             url: "/milk-delivery/get-customer-info",
-    //             type: "GET",
-    //             data: {
-    //                 _token: "{{ csrf_token() }}",
-    //                 customer_id: customerId,
-    //             },
-    //             success: function (response) {
-    //                 jQuery("#customer_name")
-    //                     .text(response.name)
-    //                     .removeClass("text-danger")
-    //                     .addClass("text-success");
-    //             },
-    //             error: function (xhr) {
-    //                 if (xhr.status === 404) {
-    //                     jQuery("#customer_name")
-    //                         .text("Customer not found")
-    //                         .removeClass("text-success")
-    //                         .addClass("text-danger");
-    //                 } else {
-    //                     jQuery("#customer_name")
-    //                         .text("Error fetching customer info")
-    //                         .removeClass("text-success")
-    //                         .addClass("text-danger");
-    //                 }
-    //             },
-    //         });
-    //     } else {
-    //         jQuery("#customer_name").text("");
-    //     }
-    // });
 });
 
 document.addEventListener("DOMContentLoaded", function () {

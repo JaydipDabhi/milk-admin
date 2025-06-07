@@ -38,6 +38,10 @@ Route::prefix('customer')->name('admin.')->group(function () {
 Route::prefix('milk-delivery')->name('admin.')->group(function () {
     Route::get('/create', [MilkDeliveryController::class, 'milk_delivery'])->name('milk_delivery');
     Route::get('/get-customer-info', [MilkDeliveryController::class, 'getCustomerInfo'])->name('get.customer.info');
+    Route::post('/store', [MilkDeliveryController::class, 'milk_delivery_store'])->name('admin.milk_delivery_store');
+    Route::get('/list', [MilkDeliveryController::class, 'milk_delivery_list'])->name('milk_delivery_list');
+    Route::get('/edit/{id}', [MilkDeliveryController::class, 'milk_delivery_edit'])->name('milk_delivery_edit');
+    Route::put('/update/{id}', [MilkDeliveryController::class, 'milk_delivery_update'])->name('milk_delivery_update');
 });
 
 // Rate Master
