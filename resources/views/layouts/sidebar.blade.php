@@ -69,14 +69,22 @@
                 </li>
 
                 {{-- Milk Delivery --}}
-                <li class="nav-item ">
-                    <a href="javascript:void(0);" class="nav-link">
+                @php
+                    $MilkMenuOpen = request()->routeIs(
+                        'admin.milk_delivery_list',
+                        'admin.milk_delivery',
+                        'admin.milk_delivery_edit',
+                    );
+                @endphp
+                <li class="nav-item {{ $MilkMenuOpen ? 'menu-open' : '' }}">
+                    <a href="javascript:void(0);" class="nav-link {{ $MilkMenuOpen ? 'active' : '' }}">
                         <i class="nav-icon fas fa-clipboard-list"></i>
                         <p>Milk Delivery<i class="right fas fa-angle-left"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('admin.milk_delivery_list') }}" class="nav-link">
+                            <a href="{{ route('admin.milk_delivery_list') }}"
+                                class="nav-link {{ request()->routeIs('admin.milk_delivery_list', 'admin.milk_delivery_edit') ? 'active' : '' }}">
                                 <i class="fas fa-list nav-icon"></i>
                                 <p>Milk Delivery List</p>
                             </a>
@@ -99,6 +107,25 @@
                                 class="nav-link {{ request()->routeIs('admin.rate_list', 'admin.rate_edit') ? 'active' : '' }}">
                                 <i class="fas fa-list nav-icon"></i>
                                 <p>Rate List</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                {{-- Rate Master --}}
+                {{-- @php
+                    $RateMenuOpen = request()->routeIs('admin.add_rate', 'admin.rate_list', 'admin.rate_edit');
+                @endphp --}}
+                <li class="nav-item">
+                    <a href="javascript:void(0);" class="nav-link">
+                        <i class="nav-icon fas fa-calendar-alt"></i>
+                        <p>Monthly Reports<i class="right fas fa-angle-left"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('reports.monthly') }}" class="nav-link">
+                                <i class="fas fa-file-alt nav-icon"></i>
+                                <p>Monthly Reports</p>
                             </a>
                         </li>
                     </ul>

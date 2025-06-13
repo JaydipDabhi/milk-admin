@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\MilkDeliveryController;
+use App\Http\Controllers\MonthlyReportsController;
 use App\Http\Controllers\RateMasterController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +43,7 @@ Route::prefix('milk-delivery')->name('admin.')->group(function () {
     Route::get('/list', [MilkDeliveryController::class, 'milk_delivery_list'])->name('milk_delivery_list');
     Route::get('/edit/{id}', [MilkDeliveryController::class, 'milk_delivery_edit'])->name('milk_delivery_edit');
     Route::put('/update/{id}', [MilkDeliveryController::class, 'milk_delivery_update'])->name('milk_delivery_update');
+    Route::delete('/delete/{id}', [RateMasterController::class, 'milk_delivery_delete'])->name('milk_delivery_delete');
 });
 
 // Rate Master
@@ -52,4 +54,10 @@ Route::prefix('rate')->name('admin.')->group(function () {
     Route::get('/edit/{id}', [RateMasterController::class, 'rate_edit'])->name('rate_edit');
     Route::put('/update/{id}', [RateMasterController::class, 'rate_update'])->name('rate_update');
     Route::delete('/delete/{id}', [RateMasterController::class, 'rate_delete'])->name('rate_delete');
+});
+
+
+Route::prefix('reports')->name('reports.')->group(function () {
+    Route::get('/monthly', [MonthlyReportsController::class, 'showForm'])->name('monthly');
+    Route::get('/monthly/generate', [MonthlyReportsController::class, 'generateReport'])->name('monthly.generate');
 });

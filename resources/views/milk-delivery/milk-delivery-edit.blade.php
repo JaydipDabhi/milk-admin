@@ -40,57 +40,6 @@
                             <div class="card-header">
                                 <h3 class="card-title">Edit Milk Delivery</h3>
                             </div>
-                            {{-- <form method="POST" action="{{ route('admin.milk_delivery_update', $delivery->id) }}">
-                                @csrf
-                                @method('PUT')
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <label for="customer_id">Customer Number</label>
-                                        <input type="number" class="form-control" id="customer_id" name="customer_id"
-                                            placeholder="Enter Customer Number">
-                                        <div id="customer_name" class="text-success font-weight-bold mt-2"></div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="weight">Weight (in liters)</label>
-                                        <input type="number" class="form-control" id="weight" name="weight"
-                                            placeholder="Enter Weight (in liters)" step="0.1" min="0">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="type">Type (Cow/Buffalo)</label>
-                                        <input type="text" class="form-control" id="type" name="type" disabled>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="rate">Rate</label>
-                                        <input type="text" class="form-control" id="rate" name="rate" disabled>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="total_rate">Total Rate</label>
-                                        <input type="text" class="form-control" id="total_rate" name="total_rate"
-                                            disabled>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="time" id="morning"
-                                                value="Morning">
-                                            <label class="form-check-label">Morning</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="time" id="evening"
-                                                value="Evening">
-                                            <label class="form-check-label">Evening</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </div>
-                            </form> --}}
                             <form method="POST" action="{{ route('admin.milk_delivery_update', $delivery->id) }}">
                                 @csrf
                                 @method('PUT')
