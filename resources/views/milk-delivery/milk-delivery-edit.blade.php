@@ -57,7 +57,7 @@
                                     <div class="form-group">
                                         <label for="weight">Weight (in liters)</label>
                                         <input type="number" class="form-control" id="weight" name="weight"
-                                            value="{{ $delivery->weight }}" step="0.1" min="0">
+                                            value="{{ $delivery->weight }}" step="0.01" min="0">
                                     </div>
 
                                     <div class="form-group">
@@ -65,7 +65,7 @@
                                         <div class="input-group date" id="reservationdate" data-target-input="nearest">
                                             <input type="text" name="delivery_date" id="delivery_date"
                                                 class="form-control datetimepicker-input" data-target="#reservationdate"
-                                                value="{{ optional($delivery->created_at)->format('Y-m-d') }}" />
+                                                value="{{ optional($delivery->created_at)->format('d-m-Y') }}" />
                                             <div class="input-group-append" data-target="#reservationdate"
                                                 data-toggle="datetimepicker">
                                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>

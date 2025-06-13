@@ -58,7 +58,7 @@
                                         <label for="weight">Weight (in liters)</label>
                                         <input type="number" class="form-control @error('weight') is-invalid @enderror"
                                             id="weight" name="weight" placeholder="Enter Weight (in liters)"
-                                            step="0.1" min="0">
+                                            step="0.01" min="0">
                                         @error('weight')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
