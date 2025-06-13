@@ -66,6 +66,21 @@ function confirmRateDelete(rateId) {
         }
     });
 }
+function confirmMilkDeliveryDelete(deliveryId) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "This Milk Delivery will be permanently deleted!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById("delete-form-" + deliveryId).submit();
+        }
+    });
+}
 
 $(function () {
     $("#reservationdate").datetimepicker({

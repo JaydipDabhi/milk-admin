@@ -108,6 +108,14 @@ class MilkDeliveryController extends Controller
             'time' => $request->time,
         ]);
 
-        return redirect()->route('admin.milk_delivery_list')->with('success', 'Milk delivery updated successfully.');
+        return redirect()->route('admin.milk_delivery_list')->with('success_update', 'Milk delivery updated successfully.');
+    }
+
+    public function milk_delivery_delete($id)
+    {
+        $delivery = MilkDelivery::findOrFail($id);
+        $delivery->delete();
+
+        return redirect()->back()->with('success_delete', 'Milk delivery deleted successfully.');
     }
 }

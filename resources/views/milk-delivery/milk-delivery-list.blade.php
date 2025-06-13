@@ -21,12 +21,22 @@
         <section class="content">
             <div class="container-fluid">
 
-                @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    </div>
-                @endif
+                @php
+                    $alerts = [
+                        'success' => 'success',
+                        'success_delete' => 'danger',
+                        'success_update' => 'info',
+                    ];
+                @endphp
+
+                @foreach ($alerts as $key => $type)
+                    @if (session($key))
+                        <div class="alert alert-{{ $type }} alert-dismissible fade show" role="alert">
+                            {{ session($key) }}
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        </div>
+                    @endif
+                @endforeach
 
                 <div class="row">
                     <div class="col-12">
@@ -76,12 +86,24 @@
                                                         class="text-primary mr-2">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
-                                                    <form action="" method="POST" class="d-inline">
+                                                    {{-- <form action="" method="POST" class="d-inline">
                                                         <button type="button"
                                                             class="btn btn-link text-danger p-0 m-0 align-baseline">
                                                             <i class="fas fa-trash-alt"></i>
                                                         </button>
+                                                    </form> --}}
+                                                    <form action="{{ route('admin.milk_delivery_delete', $delivery->id) }}"
+                                                        method="POST" class="d-inline"
+                                                        id="delete-form-{{ $delivery->id }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button"
+                                                            class="btn btn-link text-danger p-0 m-0 align-baseline"
+                                                            onclick="confirmMilkDeliveryDelete({{ $delivery->id }})">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
                                                     </form>
+
                                                 </td>
                                             </tr>
                                         @endforeach

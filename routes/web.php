@@ -43,7 +43,7 @@ Route::prefix('milk-delivery')->name('admin.')->group(function () {
     Route::get('/list', [MilkDeliveryController::class, 'milk_delivery_list'])->name('milk_delivery_list');
     Route::get('/edit/{id}', [MilkDeliveryController::class, 'milk_delivery_edit'])->name('milk_delivery_edit');
     Route::put('/update/{id}', [MilkDeliveryController::class, 'milk_delivery_update'])->name('milk_delivery_update');
-    Route::delete('/delete/{id}', [RateMasterController::class, 'milk_delivery_delete'])->name('milk_delivery_delete');
+    Route::delete('/delete/{id}', [MilkDeliveryController::class, 'milk_delivery_delete'])->name('milk_delivery_delete');
 });
 
 // Rate Master
