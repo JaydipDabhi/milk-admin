@@ -96,6 +96,7 @@
 
                                 <div class="card-footer">
                                     <button type="submit" class="btn btn-primary">Submit</button>
+                                    <a href="{{ route('admin.milk_delivery_list') }}" class="btn btn-secondary">Cancel</a>
                                 </div>
                             </form>
                         </div>

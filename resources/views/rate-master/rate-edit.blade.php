@@ -50,7 +50,8 @@
                                 </div>
 
                                 <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Update</button>
+                                    <button type="submit" class="btn btn-success">Update</button>
+                                    <a href="{{ route('admin.rate_list') }}" class="btn btn-secondary">Cancel</a>
                                 </div>
                             </form>
                         </div>
