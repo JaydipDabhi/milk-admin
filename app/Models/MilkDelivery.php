@@ -16,6 +16,7 @@ class MilkDelivery extends Model
         'rate',
         'total_rate',
         'time',
+        'created_at',
     ];
 
     protected $table = 'milk_delivery';

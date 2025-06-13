@@ -65,6 +65,22 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label for="delivery_date">Delivery Date</label>
+                                        <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                                            <input type="text" name="delivery_date" id="delivery_date"
+                                                class="form-control datetimepicker-input" data-target="#reservationdate" />
+                                            <div class="input-group-append" data-target="#reservationdate"
+                                                data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                        @error('delivery_date')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+
+                                    <div class="form-group">
                                         <label for="type">Type (Cow/Buffalo)</label>
                                         <input type="text" class="form-control" id="type" name="type" disabled>
                                     </div>

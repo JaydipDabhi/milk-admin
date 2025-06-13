@@ -61,6 +61,19 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label for="delivery_date">Delivery Date</label>
+                                        <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                                            <input type="text" name="delivery_date" id="delivery_date"
+                                                class="form-control datetimepicker-input" data-target="#reservationdate"
+                                                value="{{ optional($delivery->created_at)->format('Y-m-d') }}" />
+                                            <div class="input-group-append" data-target="#reservationdate"
+                                                data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="type">Type (Cow/Buffalo)</label>
                                         <input type="text" class="form-control" id="type" name="type"
                                             value="{{ $delivery->type }}" readonly>
@@ -95,7 +108,8 @@
 
                                 <div class="card-footer">
                                     <button type="submit" class="btn btn-success">Update</button>
-                                    <a href="{{ route('admin.milk_delivery_list') }}" class="btn btn-secondary">Cancel</a>
+                                    <a href="{{ route('admin.milk_delivery_list') }}"
+                                        class="btn btn-secondary">Cancel</a>
                                 </div>
                             </form>
                         </div>

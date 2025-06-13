@@ -82,9 +82,16 @@ function confirmMilkDeliveryDelete(deliveryId) {
     });
 }
 
+// flatpickr("#delivery_date", {
+//     dateFormat: "Y-m-d",
+//     defaultDate: new Date(),
+//     maxDate: "today",
+// });
+
 $(function () {
     $("#reservationdate").datetimepicker({
         format: "L",
+        maxDate: moment(),
     });
 });
 

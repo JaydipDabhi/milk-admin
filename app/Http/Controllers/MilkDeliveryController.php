@@ -41,6 +41,7 @@ class MilkDeliveryController extends Controller
             'customer_id' => 'required|exists:customers,id',
             'weight'      => 'required|numeric|min:0',
             'time'        => 'required|in:Morning,Evening',
+            'delivery_date'  => 'required|date',
         ]);
 
         $customer = Customer::find($validated['customer_id']);
@@ -65,6 +66,7 @@ class MilkDeliveryController extends Controller
             'rate'        => $rate,
             'total_rate'  => $total_rate,
             'time'        => $validated['time'],
+            'created_at'  => $validated['delivery_date'],
         ]);
 
         return redirect()->back()->with('success', 'Milk delivery record added successfully.');
@@ -95,6 +97,7 @@ class MilkDeliveryController extends Controller
             'rate' => 'required|numeric|min:0',
             'total_rate' => 'required|numeric|min:0',
             'time' => 'required|in:Morning,Evening',
+            'delivery_date'  => 'required|date',
         ]);
 
         $delivery = MilkDelivery::findOrFail($id);
@@ -106,6 +109,7 @@ class MilkDeliveryController extends Controller
             'rate' => $request->rate,
             'total_rate' => $request->total_rate,
             'time' => $request->time,
+            'created_at'  => $request->delivery_date,
         ]);
 
         return redirect()->route('admin.milk_delivery_list')->with('success_update', 'Milk delivery updated successfully.');

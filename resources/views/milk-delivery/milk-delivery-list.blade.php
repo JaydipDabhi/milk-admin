@@ -80,18 +80,14 @@
                                                 <td>{{ $delivery->rate }}</td>
                                                 <td>{{ $delivery->total_rate }}</td>
                                                 <td>{{ $delivery->time }}</td>
-                                                <td>{{ $delivery->created_at->format('d-m-Y') }}</td>
+                                                {{-- <td>{{ $delivery->created_at->format('d-m-Y') }}</td> --}}
+                                                <td>{{ $delivery->created_at ? $delivery->created_at->format('d-m-Y') : 'N/A' }}
+                                                </td>
                                                 <td>
                                                     <a href="{{ route('admin.milk_delivery_edit', $delivery->id) }}"
                                                         class="text-primary mr-2">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
-                                                    {{-- <form action="" method="POST" class="d-inline">
-                                                        <button type="button"
-                                                            class="btn btn-link text-danger p-0 m-0 align-baseline">
-                                                            <i class="fas fa-trash-alt"></i>
-                                                        </button>
-                                                    </form> --}}
                                                     <form action="{{ route('admin.milk_delivery_delete', $delivery->id) }}"
                                                         method="POST" class="d-inline"
                                                         id="delete-form-{{ $delivery->id }}">
