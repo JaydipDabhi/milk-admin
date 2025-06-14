@@ -65,11 +65,25 @@
                                         <div class="input-group date" id="reservationdate" data-target-input="nearest">
                                             <input type="text" name="delivery_date" id="delivery_date"
                                                 class="form-control datetimepicker-input" data-target="#reservationdate"
-                                                value="{{ optional($delivery->created_at)->format('d-m-Y') }}" />
+                                                value="{{ \Carbon\Carbon::parse($delivery->created_at)->format('d-m-Y') }}" />
                                             <div class="input-group-append" data-target="#reservationdate"
                                                 data-toggle="datetimepicker">
                                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                             </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Time</label><br>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="time" id="morning"
+                                                value="Morning" {{ $delivery->time == 'Morning' ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="morning">Morning</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="time" id="evening"
+                                                value="Evening" {{ $delivery->time == 'Evening' ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="evening">Evening</label>
                                         </div>
                                     </div>
 
@@ -89,20 +103,6 @@
                                         <label for="total_rate">Total Rate</label>
                                         <input type="text" class="form-control" id="total_rate" name="total_rate"
                                             value="{{ $delivery->total_rate }}" readonly>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Time</label><br>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="time" id="morning"
-                                                value="Morning" {{ $delivery->time == 'Morning' ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="morning">Morning</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="time" id="evening"
-                                                value="Evening" {{ $delivery->time == 'Evening' ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="evening">Evening</label>
-                                        </div>
                                     </div>
                                 </div>
 

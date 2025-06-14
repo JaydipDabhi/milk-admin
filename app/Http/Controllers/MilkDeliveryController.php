@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\MilkDelivery;
 use App\Models\RateMaster;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class MilkDeliveryController extends Controller
@@ -97,11 +98,12 @@ class MilkDeliveryController extends Controller
             'rate' => 'required|numeric|min:0',
             'total_rate' => 'required|numeric|min:0',
             'time' => 'required|in:Morning,Evening',
-            'delivery_date'  => 'required|date',
+            // 'delivery_date'  => 'required|date',
+            'delivery_date' => 'required|date_format:d-m-Y'
         ]);
 
         $delivery = MilkDelivery::findOrFail($id);
-
+        $deliveryDate = Carbon::createFromFormat('d-m-Y', $request->delivery_date);
         $delivery->update([
             'customer_id' => $request->customer_id,
             'weight' => $request->weight,
@@ -109,7 +111,8 @@ class MilkDeliveryController extends Controller
             'rate' => $request->rate,
             'total_rate' => $request->total_rate,
             'time' => $request->time,
-            'created_at'  => $request->delivery_date,
+            // 'created_at'  => $request->delivery_date,
+            'created_at' => $deliveryDate,
         ]);
 
         return redirect()->route('admin.milk_delivery_list')->with('success_update', 'Milk delivery updated successfully.');

@@ -68,7 +68,8 @@
                                         <label for="delivery_date">Delivery Date</label>
                                         <div class="input-group date" id="reservationdate" data-target-input="nearest">
                                             <input type="text" name="delivery_date" id="delivery_date"
-                                                class="form-control datetimepicker-input" data-target="#reservationdate" />
+                                                class="form-control datetimepicker-input @error('delivery_date') is-invalid @enderror"
+                                                data-target="#reservationdate" placeholder="Select a Delivery Date" />
                                             <div class="input-group-append" data-target="#reservationdate"
                                                 data-toggle="datetimepicker">
                                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -79,6 +80,38 @@
                                         @enderror
                                     </div>
 
+                                    {{-- <div class="form-group">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="time" id="morning"
+                                                value="Morning" {{ old('time') == 'Morning' ? 'checked' : '' }}>
+                                            <label class="form-check-label">Morning</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="time" id="evening"
+                                                value="Evening" {{ old('time') == 'Evening' ? 'checked' : '' }}>
+                                            <label class="form-check-label">Evening</label>
+                                        </div>
+                                        @error('time')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div> --}}
+
+                                    <div class="form-group">
+                                        <label>Time</label><br>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="time" id="morning"
+                                                value="Morning" {{ old('time') == 'Morning' ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="morning">Morning</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="time" id="evening"
+                                                value="Evening" {{ old('time') == 'Evening' ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="evening">Evening</label>
+                                        </div>
+                                        @error('time')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
 
                                     <div class="form-group">
                                         <label for="type">Type (Cow/Buffalo)</label>
@@ -95,24 +128,12 @@
                                         <input type="text" class="form-control" id="total_rate" name="total_rate"
                                             disabled>
                                     </div>
-
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="time" id="morning"
-                                                value="Morning">
-                                            <label class="form-check-label">Morning</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="time" id="evening"
-                                                value="Evening">
-                                            <label class="form-check-label">Evening</label>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <div class="card-footer">
                                     <button type="submit" class="btn btn-primary">Submit</button>
-                                    <a href="{{ route('admin.milk_delivery_list') }}" class="btn btn-secondary">Cancel</a>
+                                    <a href="{{ route('admin.milk_delivery_list') }}"
+                                        class="btn btn-secondary">Cancel</a>
                                 </div>
                             </form>
                         </div>

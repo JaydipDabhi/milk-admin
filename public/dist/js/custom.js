@@ -88,10 +88,18 @@ function confirmMilkDeliveryDelete(deliveryId) {
 //     maxDate: "today",
 // });
 
+// $(function () {
+//     $("#reservationdate").datetimepicker({
+//         format: "DD-MM-YYYY",
+//         maxDate: moment(),
+//     });
+// });
+
 $(function () {
     $("#reservationdate").datetimepicker({
-        format: "L",
-        maxDate: moment(),
+        format: "DD-MM-YYYY",
+        // minDate: moment().startOf("day"),
+        maxDate: moment().endOf("day"),
     });
 });
 
@@ -183,11 +191,11 @@ jQuery(document).ready(function () {
     });
 
     // Re-validate role field on change (important for Select2)
-    $("#exampleInputRole1").on("change", function () {
-        $(this).valid();
+    jQuery("#exampleInputRole1").on("change", function () {
+        jQuery(this).valid();
     });
 
-    $("#customerForm").validate({
+    jQuery("#customerForm").validate({
         rules: {
             customer_name: {
                 required: true,
@@ -206,43 +214,112 @@ jQuery(document).ready(function () {
             element.closest(".form-group").append(error);
         },
         highlight: function (element) {
-            $(element).addClass("is-invalid");
+            jQuery(element).addClass("is-invalid");
         },
         unhighlight: function (element) {
-            $(element).removeClass("is-invalid");
+            jQuery(element).removeClass("is-invalid");
+        },
+    });
+
+    jQuery("#milkAddForm").validate({
+        rules: {
+            customer_id: {
+                required: true,
+                number: true,
+                min: 1,
+            },
+            weight: {
+                required: true,
+                number: true,
+                min: 0.01,
+            },
+            delivery_date: {
+                required: true,
+                date: true,
+            },
+            time: {
+                required: true,
+            },
+        },
+        messages: {
+            customer_id: {
+                required: "Customer number is required.",
+                number: "Please enter a valid number.",
+                min: "Customer ID must be greater than 0.",
+            },
+            weight: {
+                required: "Please enter weight in liters.",
+                number: "Enter a valid number.",
+                min: "Weight must be at least 0.01 liters.",
+            },
+            delivery_date: {
+                required: "Please select a delivery date.",
+                date: "Enter a valid date.",
+            },
+            time: {
+                required: "Please select Morning or Evening.",
+            },
+        },
+        errorElement: "span",
+        errorClass: "text-danger",
+        errorPlacement: function (error, element) {
+            if (element.attr("name") === "time") {
+                error.insertAfter(
+                    element.closest(".form-group").find(".form-check").last()
+                );
+            } else {
+                const fieldId = element.attr("id");
+                error.attr("id", fieldId + "-error");
+                element.attr("aria-describedby", fieldId + "-error");
+                error.insertAfter(
+                    element.closest(".form-group").find(".input-group").length
+                        ? element.closest(".form-group").find(".input-group")
+                        : element
+                );
+            }
+        },
+        highlight: function (element) {
+            jQuery(element).addClass("is-invalid");
+        },
+        unhighlight: function (element) {
+            jQuery(element)
+                .removeClass("is-invalid")
+                .removeAttr("aria-describedby");
+            const errorId = jQuery(element).attr("id") + "-error";
+            jQuery("#" + errorId).remove();
         },
     });
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    // Auto-select time
-    const morning = document.getElementById("morning");
-    const evening = document.getElementById("evening");
+// document.addEventListener("DOMContentLoaded", function () {
+//     // Auto-select time
+//     const morning = document.getElementById("morning");
+//     const evening = document.getElementById("evening");
 
-    // Auto-select time based on current hour
-    const hour = new Date().getHours();
-    if (hour < 12) {
-        morning.checked = true;
-        evening.disabled = true;
-    } else {
-        evening.checked = true;
-        morning.disabled = true;
-    }
+//     // Auto-select time based on current hour
+//     const hour = new Date().getHours();
+//     if (hour < 12) {
+//         morning.checked = true;
+//         evening.disabled = true;
+//     } else {
+//         evening.checked = true;
+//         morning.disabled = true;
+//     }
 
-    // Disable the other option when one is selected
-    morning.addEventListener("change", function () {
-        if (morning.checked) {
-            evening.disabled = true;
-        } else {
-            evening.disabled = false;
-        }
-    });
+//     // Disable the other option when one is selected
+//     morning.addEventListener("change", function () {
+//         if (morning.checked) {
+//             evening.disabled = true;
+//         } else {
+//             evening.disabled = false;
+//         }
+//     });
 
-    evening.addEventListener("change", function () {
-        if (evening.checked) {
-            morning.disabled = true;
-        } else {
-            morning.disabled = false;
-        }
-    });
-});
+//     evening.addEventListener("change", function () {
+//         if (evening.checked) {
+//             morning.disabled = true;
+//         } else {
+//             morning.disabled = false;
+//         }
+//     });
+// });
