@@ -80,22 +80,6 @@
                                         @enderror
                                     </div>
 
-                                    {{-- <div class="form-group">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="time" id="morning"
-                                                value="Morning" {{ old('time') == 'Morning' ? 'checked' : '' }}>
-                                            <label class="form-check-label">Morning</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="time" id="evening"
-                                                value="Evening" {{ old('time') == 'Evening' ? 'checked' : '' }}>
-                                            <label class="form-check-label">Evening</label>
-                                        </div>
-                                        @error('time')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div> --}}
-
                                     <div class="form-group">
                                         <label>Time</label><br>
                                         <div class="form-check form-check-inline">

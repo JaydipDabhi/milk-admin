@@ -56,7 +56,7 @@
                             </div>
 
                             <div class="card-body">
-                                <table id="example1" class="table table-bordered table-striped">
+                                {{-- <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>Sr No.</th>
@@ -80,7 +80,6 @@
                                                 <td>{{ $delivery->rate }}</td>
                                                 <td>{{ $delivery->total_rate }}</td>
                                                 <td>{{ $delivery->time }}</td>
-                                                {{-- <td>{{ $delivery->created_at->format('d-m-Y') }}</td> --}}
                                                 <td>{{ $delivery->created_at ? $delivery->created_at->format('d-m-Y') : 'N/A' }}
                                                 </td>
                                                 <td>
@@ -117,7 +116,90 @@
                                             <th>Action</th>
                                         </tr>
                                     </tfoot>
+                                </table> --}}
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr No.</th>
+                                            <th>Customer</th>
+                                            <th>Type</th>
+                                            <th>Weight (liters)</th>
+                                            <th>Share</th>
+                                            <th>Rate</th>
+                                            <th>Total</th>
+                                            <th>Time</th>
+                                            <th>Date</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($deliveries as $index => $delivery)
+                                            <tr>
+                                                <td>{{ $delivery->id }}</td>
+                                                <td>{{ $delivery->customer->customer_name ?? 'N/A' }}</td>
+                                                <td>{{ ucfirst($delivery->type) }}</td>
+                                                <td>{{ $delivery->weight }}</td>
+
+                                                {{-- Calculate Share --}}
+                                                <td>
+                                                    @php
+                                                        $weight = $delivery->weight;
+                                                        if ($weight == 0.25) {
+                                                            $share = 0.5;
+                                                        } elseif ($weight == 0.5) {
+                                                            $share = 1;
+                                                        } elseif ($weight == 0.75) {
+                                                            $share = 1.5;
+                                                        } elseif ($weight == 1) {
+                                                            $share = 2;
+                                                        } else {
+                                                            $share = $weight * 2;
+                                                        }
+                                                    @endphp
+                                                    {{ rtrim(rtrim(number_format($share, 2), '0'), '.') }}
+                                                </td>
+
+                                                <td>{{ $delivery->rate }}</td>
+                                                <td>{{ $delivery->total_rate }}</td>
+                                                <td>{{ $delivery->time }}</td>
+                                                <td>{{ $delivery->created_at ? $delivery->created_at->format('d-m-Y') : 'N/A' }}
+                                                </td>
+                                                <td>
+                                                    <a href="{{ route('admin.milk_delivery_edit', $delivery->id) }}"
+                                                        class="text-primary mr-2">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <form action="{{ route('admin.milk_delivery_delete', $delivery->id) }}"
+                                                        method="POST" class="d-inline"
+                                                        id="delete-form-{{ $delivery->id }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button"
+                                                            class="btn btn-link text-danger p-0 m-0 align-baseline"
+                                                            onclick="confirmMilkDeliveryDelete({{ $delivery->id }})">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Sr No.</th>
+                                            <th>Customer</th>
+                                            <th>Type</th>
+                                            <th>Weight (liters)</th>
+                                            <th>Share</th>
+                                            <th>Rate</th>
+                                            <th>Total</th>
+                                            <th>Time</th>
+                                            <th>Date</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
+
                             </div>
                         </div>
                     </div>

@@ -41,7 +41,8 @@
                                     <div class="form-group">
                                         <label for="rate">Rate (₹/Liter)</label>
                                         <input type="number" class="form-control" id="rate" name="rate"
-                                            placeholder="Enter Rate (₹/Liter)" value="{{ old('rate') }}">
+                                            placeholder="Enter Rate (₹/Liter)" value="{{ old('rate') }}" step="0.01"
+                                            min="0">
                                         @error('rate')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
