@@ -58,6 +58,8 @@ Route::prefix('rate')->name('admin.')->group(function () {
 
 
 Route::prefix('reports')->name('reports.')->group(function () {
-    Route::get('/monthly', [MonthlyReportsController::class, 'showForm'])->name('monthly');
-    Route::get('/monthly/generate', [MonthlyReportsController::class, 'generateReport'])->name('monthly.generate');
+    Route::get('/monthly', [MonthlyReportsController::class, 'monthly_report_form'])->name('monthly_report_form');
+    Route::get('/monthly/generate', [MonthlyReportsController::class, 'generate_monthly_report'])->name('generate_monthly_report');
+    Route::get('/yearly', [MonthlyReportsController::class, 'yearly_report_form'])->name('yearly_report_form');
+    Route::get('/yearly/generate', [MonthlyReportsController::class, 'generate_yearly_report'])->name('generate_yearly_report');
 });

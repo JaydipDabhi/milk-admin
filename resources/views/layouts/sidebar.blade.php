@@ -68,18 +68,21 @@
                     </ul>
                 </li>
 
-                {{-- Milk Delivery --}}
+                {{-- Milk Delivery Menu --}}
                 @php
-                    $MilkMenuOpen = request()->routeIs(
+                    $milkMenuOpen = request()->routeIs(
                         'admin.milk_delivery_list',
                         'admin.milk_delivery',
                         'admin.milk_delivery_edit',
                     );
                 @endphp
-                <li class="nav-item {{ $MilkMenuOpen ? 'menu-open' : '' }}">
-                    <a href="javascript:void(0);" class="nav-link {{ $MilkMenuOpen ? 'active' : '' }}">
+                <li class="nav-item {{ $milkMenuOpen ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ $milkMenuOpen ? 'active' : '' }}">
                         <i class="nav-icon fas fa-clipboard-list"></i>
-                        <p>Milk Delivery<i class="right fas fa-angle-left"></i></p>
+                        <p>
+                            Milk Delivery
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
@@ -94,12 +97,15 @@
 
                 {{-- Rate Master --}}
                 @php
-                    $RateMenuOpen = request()->routeIs('admin.add_rate', 'admin.rate_list', 'admin.rate_edit');
+                    $rateMenuOpen = request()->routeIs('admin.add_rate', 'admin.rate_list', 'admin.rate_edit');
                 @endphp
-                <li class="nav-item {{ $RateMenuOpen ? 'menu-open' : '' }}">
-                    <a href="javascript:void(0);" class="nav-link {{ $RateMenuOpen ? 'active' : '' }}">
+                <li class="nav-item {{ $rateMenuOpen ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ $rateMenuOpen ? 'active' : '' }}">
                         <i class="nav-icon fas fa-rupee-sign"></i>
-                        <p>Rate Master<i class="right fas fa-angle-left"></i></p>
+                        <p>
+                            Rate Master
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
@@ -112,47 +118,37 @@
                     </ul>
                 </li>
 
-                {{-- Rate Master --}}
-                {{-- @php
-                    $RateMenuOpen = request()->routeIs('admin.add_rate', 'admin.rate_list', 'admin.rate_edit');
-                @endphp --}}
-                <li class="nav-item">
-                    <a href="javascript:void(0);" class="nav-link">
-                        <i class="nav-icon fas fa-calendar-alt"></i>
-                        <p>Monthly Reports<i class="right fas fa-angle-left"></i></p>
+                {{-- Reports Menu --}}
+                @php
+                    $reportMenuOpen = request()->routeIs('reports.monthly_report_form', 'reports.yearly_report_form');
+                @endphp
+                <li class="nav-item {{ $reportMenuOpen ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ $reportMenuOpen ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-chart-line"></i>
+                        <p>
+                            Reports
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('reports.monthly') }}" class="nav-link">
-                                <i class="fas fa-file-alt nav-icon"></i>
+                            <a href="{{ route('reports.monthly_report_form') }}"
+                                class="nav-link {{ request()->routeIs('reports.monthly_report_form') ? 'active' : '' }}">
+                                <i class="fas fa-calendar-alt nav-icon"></i>
                                 <p>Monthly Reports</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('reports.yearly_report_form') }}"
+                                class="nav-link {{ request()->routeIs('reports.yearly_report_form') ? 'active' : '' }}">
+                                <i class="fas fa-calendar nav-icon"></i>
+                                <p>Yearly Reports</p>
                             </a>
                         </li>
                     </ul>
                 </li>
-
-                {{-- <li class="nav-item ">
-                    <a href="javascript:void(0);" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>All Customers<i class="right fas fa-angle-left"></i></p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="fas fa-user nav-icon"></i>
-                                <p>Customer List</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="fas fa-user-plus nav-icon"></i>
-                                <p>Add New Customer</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li> --}}
-
             </ul>
+
         </nav>
 
     </div>
