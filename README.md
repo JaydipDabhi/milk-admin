@@ -17,7 +17,6 @@ A Laravel-based admin panel for managing milk delivery operations, including cus
 -   PHP >= 8.2
 -   Composer
 -   Laravel >= 12
--   Node.js >= 18 & npm >= 9
 -   MySQL / MariaDB
 
 ## ⚙️ Installation
