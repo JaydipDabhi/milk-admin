@@ -120,7 +120,12 @@
 
                 {{-- Reports Menu --}}
                 @php
-                    $reportMenuOpen = request()->routeIs('reports.monthly_report_form', 'reports.yearly_report_form');
+                    $reportMenuOpen = request()->routeIs(
+                        'reports.full_reports',
+                        'reports.monthly_report_form',
+                        'reports.yearly_report_form',
+                        'reports.print_reports',
+                    );
                 @endphp
                 <li class="nav-item {{ $reportMenuOpen ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ $reportMenuOpen ? 'active' : '' }}">
@@ -131,6 +136,13 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('reports.full_reports') }}"
+                                class="nav-link {{ request()->routeIs('reports.full_reports') ? 'active' : '' }}">
+                                <i class="fas fa-list-alt nav-icon"></i>
+                                <p>All Over Full Reports</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('reports.monthly_report_form') }}"
                                 class="nav-link {{ request()->routeIs('reports.monthly_report_form') ? 'active' : '' }}">
@@ -145,7 +157,15 @@
                                 <p>Yearly Reports</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('reports.print_reports') }}"
+                                class="nav-link {{ request()->routeIs('reports.print_reports') ? 'active' : '' }}">
+                                <i class="fas fa-print nav-icon"></i>
+                                <p>Print Monthly Reports</p>
+                            </a>
+                        </li>
                     </ul>
+
                 </li>
             </ul>
 
