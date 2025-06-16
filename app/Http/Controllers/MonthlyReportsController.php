@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\MilkDelivery;
 use App\Models\RateMaster;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class MonthlyReportsController extends Controller
 {
@@ -128,55 +130,94 @@ class MonthlyReportsController extends Controller
         return view('monthly-reports.full-reports', compact('summary'));
     }
 
-    // public function print_reports(Request $request)
-    // {
-    //     $customerIds = $request->input('customer_ids', []);
-    //     $customers = Customer::whereIn('id', $customerIds)->get();
-
-    //     $cowRate = RateMaster::where('rate_type', 'cow')->latest('id')->value('rate') ?? 0;
-    //     $buffaloRate = RateMaster::where('rate_type', 'buffalo')->latest('id')->value('rate') ?? 0;
-
-    //     $data = $customers->map(function ($customer) use ($cowRate, $buffaloRate) {
-    //         $deliveries = MilkDelivery::where('customer_id', $customer->id)->get();
-
-    //         $cowMilk = $deliveries->where('type', 'cow')->sum('weight');
-    //         $buffaloMilk = $deliveries->where('type', 'buffalo')->sum('weight');
-
-    //         return [
-    //             'customer' => $customer,
-    //             'cowMilk' => $cowMilk,
-    //             'buffaloMilk' => $buffaloMilk,
-    //             'cowRate' => $cowRate,
-    //             'buffaloRate' => $buffaloRate,
-    //         ];
-    //     });
-
-    //     return view('monthly-reports.print-reports', compact('data'));
-    // }
-
     public function print_reports(Request $request)
     {
         $customerIds = $request->input('customer_ids', []);
         $customers = Customer::whereIn('id', $customerIds)->get();
 
         $cowRate = RateMaster::where('rate_type', 'cow')->latest('id')->value('rate') ?? 0;
-        $buffaloRate = RateMaster::where('rate_type', 'buffalo')->latest('id')->value('rate') ?? 0;
+        $buffloRate = RateMaster::where('rate_type', 'bufflo')->latest('id')->value('rate') ?? 0;
 
-        $data = $customers->map(function ($customer) use ($cowRate, $buffaloRate) {
+        $data = $customers->map(function ($customer) use ($cowRate, $buffloRate) {
             $deliveries = MilkDelivery::where('customer_id', $customer->id)->get();
 
             $cowMilk = $deliveries->where('type', 'cow')->sum('weight');
-            $buffaloMilk = $deliveries->where('type', 'buffalo')->sum('weight');
+            $buffloMilk = $deliveries->where('type', 'bufflo')->sum('weight');
 
             return [
                 'customer' => $customer,
                 'cowMilk' => $cowMilk,
-                'buffaloMilk' => $buffaloMilk,
+                'buffloMilk' => $buffloMilk,
                 'cowRate' => $cowRate,
-                'buffaloRate' => $buffaloRate,
+                'buffloRate' => $buffloRate,
             ];
         });
 
         return view('monthly-reports.print-reports', compact('data'));
+    }
+
+    public function download_pdf(Request $request)
+    {
+        $customerIds = $request->input('customer_ids', []);
+        $month = $request->input('month');
+        $year = $request->input('year');
+
+        if (!$month || !$year) {
+            return back()->with('error', 'Please select both month and year.');
+        }
+
+        $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
+        $endDate = Carbon::createFromDate($year, $month, 1)->endOfMonth();
+
+        $customers = Customer::whereIn('id', $customerIds)->get();
+
+        $rates = RateMaster::latest('id')
+            ->get()
+            ->pluck('rate', 'rate_type') // ['cow' => 60, 'bufflo' => 70, ...]
+            ->mapWithKeys(fn($rate, $type) => [strtolower($type) => $rate]);
+
+        $data = $customers->map(function ($customer) use ($startDate, $endDate, $rates) {
+            $deliveries = MilkDelivery::where('customer_id', $customer->id)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->get();
+
+            $grouped = $deliveries->groupBy(fn($d) => strtolower($d->type));
+
+            $products = [];
+
+            foreach ($grouped as $type => $entries) {
+                $totalWeight = $entries->sum('weight');
+
+                // Default to x2 shares logic, customizable per product
+                $shares = match ($totalWeight) {
+                    0.25 => 0.5,
+                    0.5 => 1,
+                    0.75 => 1.5,
+                    1 => 2,
+                    default => $totalWeight * 2,
+                };
+
+                $rate = $rates[$type] ?? 0;
+                $amount = $shares * ($rate / 2);
+
+                $products[] = [
+                    'type' => Str::title($type),
+                    'weight' => $totalWeight,
+                    'shares' => $shares,
+                    'rate' => $rate,
+                    'total' => $amount,
+                ];
+            }
+
+            return [
+                'customer' => $customer,
+                'products' => $products,
+                'startDate' => $startDate->format('d-m-Y'),
+                'endDate' => $endDate->format('d-m-Y'),
+            ];
+        });
+
+        $pdf = Pdf::loadView('monthly-reports.pdf-view', compact('data'))->setPaper('a4');
+        return $pdf->stream("milk-bill-{$month}-{$year}.pdf");
     }
 }
