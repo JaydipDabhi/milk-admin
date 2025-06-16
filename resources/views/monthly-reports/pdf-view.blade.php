@@ -10,7 +10,8 @@
         }
 
         body {
-            font-family: DejaVu Sans, sans-serif;
+            /* font-family: DejaVu Sans, sans-serif; */
+            font-family: 'noto_sans_gujarati', DejaVu Sans, sans-serif;
             font-size: 15px;
             margin: 0;
             padding: 0;
@@ -18,15 +19,22 @@
 
         .bill-box {
             text-align: center;
-            width: 48%;
+            width: 45%;
             display: inline-block;
             vertical-align: top;
             margin: 6px 1%;
-            padding: 8px 10px 4px 10px;
-            border: 1px solid #000;
+            padding: 8px;
+            border: 2px solid #000;
             box-sizing: border-box;
-            height: 210px;
+            height: 200px;
             page-break-inside: avoid;
+        }
+
+        .divider {
+            border: none;
+            border-top: 2px solid #000;
+            margin: 4px 0;
+            padding-left: 10px;
         }
 
         .header {
@@ -62,9 +70,10 @@
 
                                 @foreach ($item['products'] as $product)
                                     {{ $product['type'] }}<br>
-                                    {{ number_format($product['shares'], 0) }} shares<br>
-                                    × ₹ {{ number_format($product['rate'] / 2, 0) }} rate<br>
-                                    = <strong>₹ {{ number_format($product['total'], 2) }} total</strong><br><br>
+                                    {{ number_format($product['shares'], 0) }} Shares<br>
+                                    × ₹ {{ number_format($product['rate'] / 2, 0) }} Rate<br>
+                                    <hr class="divider">
+                                    = <strong>₹ {{ number_format($product['total'], 2) }} Total</strong>
                                 @endforeach
                             </div>
                         </div>

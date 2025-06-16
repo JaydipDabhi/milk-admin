@@ -21,6 +21,19 @@ return [
     'convert_entities' => true,
 
     'options' => [
+        'font_dir' => storage_path('fonts'),
+        'font_cache' => storage_path('fonts'),
+
+        'default_font' => 'noto_sans_gujarati',
+
+        'custom_font_dir' => storage_path('fonts'),
+        'custom_font_data' => [
+            'noto_sans_gujarati' => [
+                'R' => 'NotoSansGujarati-Regular.ttf',
+                'useOTL' => true,
+                'useKashida' => false,
+            ],
+        ],
         /**
          * The location of the DOMPDF font directory
          *
