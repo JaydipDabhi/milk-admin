@@ -82,26 +82,12 @@ function confirmMilkDeliveryDelete(deliveryId) {
     });
 }
 
-// flatpickr("#delivery_date", {
-//     dateFormat: "Y-m-d",
-//     defaultDate: new Date(),
-//     maxDate: "today",
-// });
-
 $(function () {
     $("#reservationdate").datetimepicker({
         format: "DD-MM-YYYY",
         maxDate: moment(),
     });
 });
-
-// $(function () {
-//     $("#reservationdate").datetimepicker({
-//         format: "DD-MM-YYYY",
-//         // minDate: moment().startOf("day"),
-//         maxDate: moment().endOf("day"),
-//     });
-// });
 
 jQuery(document).ready(function () {
     jQuery("#userForm").validate({
@@ -221,26 +207,6 @@ jQuery(document).ready(function () {
         },
     });
 
-    // Custom method: disallow future dates
-    jQuery.validator.addMethod(
-        "notFutureDate",
-        function (value, element) {
-            if (!value) return false;
-
-            // Convert DD-MM-YYYY to YYYY-MM-DD
-            const parts = value.split("-");
-            if (parts.length !== 3) return false;
-
-            const formatted = `${parts[2]}-${parts[1]}-${parts[0]}`;
-            const selectedDate = new Date(formatted);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            return selectedDate <= today;
-        },
-        "Future dates are not allowed."
-    );
-
     // Initialize validation
     jQuery("#milkAddForm").validate({
         rules: {
@@ -256,7 +222,6 @@ jQuery(document).ready(function () {
             },
             delivery_date: {
                 required: true,
-                notFutureDate: true,
             },
             time: {
                 required: true,
@@ -275,7 +240,6 @@ jQuery(document).ready(function () {
             },
             delivery_date: {
                 required: "Please select a delivery date.",
-                notFutureDate: "Future dates are not allowed.",
             },
             time: {
                 required: "Please select Morning or Evening.",
@@ -310,75 +274,6 @@ jQuery(document).ready(function () {
             jQuery("#" + errorId).remove();
         },
     });
-
-    // jQuery("#milkAddForm").validate({
-    //     rules: {
-    //         customer_id: {
-    //             required: true,
-    //             number: true,
-    //             min: 1,
-    //         },
-    //         weight: {
-    //             required: true,
-    //             number: true,
-    //             min: 0.01,
-    //         },
-    //         delivery_date: {
-    //             required: true,
-    //             date: true,
-    //         },
-    //         time: {
-    //             required: true,
-    //         },
-    //     },
-    //     messages: {
-    //         customer_id: {
-    //             required: "Customer number is required.",
-    //             number: "Please enter a valid number.",
-    //             min: "Customer ID must be greater than 0.",
-    //         },
-    //         weight: {
-    //             required: "Please enter weight in liters.",
-    //             number: "Enter a valid number.",
-    //             min: "Weight must be at least 0.01 liters.",
-    //         },
-    //         delivery_date: {
-    //             required: "Please select a delivery date.",
-    //             date: "Enter a valid date.",
-    //         },
-    //         time: {
-    //             required: "Please select Morning or Evening.",
-    //         },
-    //     },
-    //     errorElement: "span",
-    //     errorClass: "text-danger",
-    //     errorPlacement: function (error, element) {
-    //         if (element.attr("name") === "time") {
-    //             error.insertAfter(
-    //                 element.closest(".form-group").find(".form-check").last()
-    //             );
-    //         } else {
-    //             const fieldId = element.attr("id");
-    //             error.attr("id", fieldId + "-error");
-    //             element.attr("aria-describedby", fieldId + "-error");
-    //             error.insertAfter(
-    //                 element.closest(".form-group").find(".input-group").length
-    //                     ? element.closest(".form-group").find(".input-group")
-    //                     : element
-    //             );
-    //         }
-    //     },
-    //     highlight: function (element) {
-    //         jQuery(element).addClass("is-invalid");
-    //     },
-    //     unhighlight: function (element) {
-    //         jQuery(element)
-    //             .removeClass("is-invalid")
-    //             .removeAttr("aria-describedby");
-    //         const errorId = jQuery(element).attr("id") + "-error";
-    //         jQuery("#" + errorId).remove();
-    //     },
-    // });
 });
 
 // document.addEventListener("DOMContentLoaded", function () {
