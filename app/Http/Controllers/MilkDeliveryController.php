@@ -73,9 +73,22 @@ class MilkDeliveryController extends Controller
         return redirect()->back()->with('success', 'Milk delivery record added successfully.');
     }
 
+    // public function milk_delivery_list()
+    // {
+    //     $deliveries = MilkDelivery::with('customer')->orderBy('id', 'desc')->get();
+    //     return view('milk-delivery.milk-delivery-list', compact('deliveries'));
+    // }
+
     public function milk_delivery_list()
     {
-        $deliveries = MilkDelivery::with('customer')->orderBy('id', 'desc')->get();
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+
+        $deliveries = MilkDelivery::with('customer')
+            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->orderBy('id', 'desc')
+            ->get();
+
         return view('milk-delivery.milk-delivery-list', compact('deliveries'));
     }
 
