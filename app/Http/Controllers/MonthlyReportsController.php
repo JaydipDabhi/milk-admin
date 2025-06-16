@@ -224,6 +224,6 @@ class MonthlyReportsController extends Controller
         }
 
         $pdf = Pdf::loadView('monthly-reports.pdf-view', compact('data'))->setPaper('a4');
-        return $pdf->stream("milk-bill-{$month}-{$year}.pdf");
+        return $pdf->download("milk-bill-{$month}-{$year}.pdf");
     }
 }
