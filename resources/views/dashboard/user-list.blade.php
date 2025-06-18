@@ -30,12 +30,10 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="row w-100 align-items-center">
-                                    <!-- Left side: Title -->
                                     <div class="col-12 col-md-6 mb-2 mb-md-0">
                                         <h3 class="card-title mb-0">Users List</h3>
                                     </div>
 
-                                    <!-- Right side: Button -->
                                     <div class="col-12 col-md-6 text-md-right text-left">
                                         <a href="{{ route('admin.user_create') }}" class="btn btn-primary">
                                             <i class="fas fa-user-plus mr-1"></i> Add New User

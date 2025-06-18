@@ -22,7 +22,6 @@ class MilkDeliveryController extends Controller
             return response()->json(['error' => 'Customer not found'], 404);
         }
 
-        // Get rate for customer_type (e.g., Cow/Buffalo)
         $rate = RateMaster::where('rate_type', $customer->customer_type)->first();
 
         if (!$rate) {
@@ -73,12 +72,6 @@ class MilkDeliveryController extends Controller
         return redirect()->back()->with('success', 'Milk delivery record added successfully.');
     }
 
-    // public function milk_delivery_list()
-    // {
-    //     $deliveries = MilkDelivery::with('customer')->orderBy('id', 'desc')->get();
-    //     return view('milk-delivery.milk-delivery-list', compact('deliveries'));
-    // }
-
     public function milk_delivery_list()
     {
         $startOfMonth = Carbon::now()->startOfMonth();
@@ -92,16 +85,13 @@ class MilkDeliveryController extends Controller
         return view('milk-delivery.milk-delivery-list', compact('deliveries'));
     }
 
-    // Show edit form
     public function milk_delivery_edit($id)
     {
         $delivery = MilkDelivery::findOrFail($id);
-        // If you want to allow changing type or rate from rate_master table:
         $rateTypes = RateMaster::select('rate_type')->distinct()->pluck('rate_type');
         return view('milk-delivery.milk-delivery-edit', compact('delivery', 'rateTypes'));
     }
 
-    // Handle update form submission
     public function milk_delivery_update(Request $request, $id)
     {
         $request->validate([
@@ -111,7 +101,6 @@ class MilkDeliveryController extends Controller
             'rate' => 'required|numeric|min:0',
             'total_rate' => 'required|numeric|min:0',
             'time' => 'required|in:Morning,Evening',
-            // 'delivery_date'  => 'required|date',
             'delivery_date' => 'required|date_format:d-m-Y'
         ]);
 
@@ -124,7 +113,6 @@ class MilkDeliveryController extends Controller
             'rate' => $request->rate,
             'total_rate' => $request->total_rate,
             'time' => $request->time,
-            // 'created_at'  => $request->delivery_date,
             'created_at' => $deliveryDate,
         ]);
 

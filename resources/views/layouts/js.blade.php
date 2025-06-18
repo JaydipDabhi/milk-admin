@@ -16,9 +16,6 @@
 <!-- Tempusdominus Bootstrap 4 (depends on Bootstrap and Moment.js) -->
 <script src="{{ asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
 
-<!-- Flatpickr (independent, but should be after jQuery and Bootstrap to avoid UI conflicts) -->
-{{-- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> --}}
-
 <!-- Bootstrap Color Picker (optional, sometimes used with date forms) -->
 <script src="{{ asset('plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js') }}"></script>
 

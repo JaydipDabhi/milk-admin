@@ -24,6 +24,7 @@
                     $alerts = [
                         'success' => 'success',
                         'success_delete' => 'danger',
+                        'error' => 'danger',
                         'success_update' => 'info',
                     ];
                 @endphp

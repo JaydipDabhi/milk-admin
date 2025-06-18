@@ -25,18 +25,14 @@
                 {{ session('success') }}
             </div>
         @endif
-        {{-- @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
             </div>
-        @endif --}}
+        @endif
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="javascript:void(0);" class="h1"><b>Admin</b>LTE</a>
+                <a href="javascript:void(0);" class="h1"><b>Chamunda </b>Dairy</a>
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
@@ -44,12 +40,7 @@
                 <form action="{{ route('admin.loginuser') }}" method="post">
                     @csrf
                     <!-- Email Error -->
-                    @if ($errors->has('email'))
-                        <div class="text-danger mb-2">
-                            {{ $errors->first('email') }}
-                        </div>
-                    @endif
-                    <div class="input-group mb-3">
+                    <div class="input-group">
                         <input type="email" class="form-control" placeholder="Email" name="email"
                             value="{{ old('email') }}">
                         <div class="input-group-append">
@@ -58,13 +49,13 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Password Error -->
-                    @if ($errors->has('password'))
-                        <div class="text-danger mb-2">
-                            {{ $errors->first('password') }}
+                    @if ($errors->has('email'))
+                        <div class="text-danger">
+                            {{ $errors->first('email') }}
                         </div>
                     @endif
-                    <div class="input-group mb-3">
+                    <!-- Password Error -->
+                    <div class="input-group mt-2">
                         <input type="password" class="form-control" placeholder="Password" name="password">
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -72,7 +63,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    @if ($errors->has('password'))
+                        <div class="text-danger">
+                            {{ $errors->first('password') }}
+                        </div>
+                    @endif
+                    <div class="row mt-2">
                         <div class="col-8">
                             <div class="icheck-primary">
                                 <input type="checkbox" id="remember">
@@ -90,11 +86,11 @@
                 </form>
 
                 <p class="mb-1">
-                    <a href="javascript:void(0);">I forgot my password</a>
+                    <a href="{{ route('password.request') }}">I forgot my password</a>
                 </p>
-                <p class="mb-0">
+                {{-- <p class="mb-0">
                     <a href="{{ route('admin.register') }}" class="text-center">Register a new membership</a>
-                </p>
+                </p> --}}
             </div>
             <!-- /.card-body -->
         </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\RateMaster;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
@@ -41,6 +42,9 @@ class CustomerController extends Controller
 
     public function customer_edit($id)
     {
+        if (Auth::user()->role !== 'Super Admin') {
+            return redirect()->route('admin.customer_list')->with('error', 'You cannot edit the customer.');
+        }
         $customer = Customer::findOrFail($id);
         $rateTypes = RateMaster::select('rate_type')->distinct()->pluck('rate_type');
         return view('customer.customer-edit', compact('customer', 'rateTypes'));
@@ -68,6 +72,9 @@ class CustomerController extends Controller
 
     public function customer_delete($id)
     {
+        if (Auth::user()->role !== 'Super Admin') {
+            return redirect()->route('admin.customer_list')->with('error', 'You cannot delete a customer.');
+        }
         $customer = Customer::findOrFail($id);
         $customer->delete();
 

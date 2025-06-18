@@ -39,9 +39,6 @@
 <!-- Bootstrap Color Picker (optional, sometimes paired with date pickers) -->
 <link rel="stylesheet" href="{{ asset('plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css') }}">
 
-<!-- Flatpickr (independent, lightweight alternative) -->
-{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> --}}
-
 <!-- SweetAlert2 (nice modals for forms, including date pickers) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
 

@@ -92,14 +92,13 @@ class MonthlyReportsController extends Controller
         $summary = [];
 
         foreach ($rateMasters as $rate) {
-            $type = strtolower($rate->rate_type); // cow, buffalo, ghee, butter
+            $type = strtolower($rate->rate_type);
 
             $deliveries = MilkDelivery::where('type', $type)->get();
 
-            $total_weight = $deliveries->sum('weight');        // L or kg
+            $total_weight = $deliveries->sum('weight');
             $total_amount = $deliveries->sum('total_rate');
 
-            // Share logic (only for cow/bufflo)
             if (in_array($type, ['cow', 'bufflo'])) {
                 if ($total_weight == 0.25) {
                     $shares = 0.5;
@@ -113,7 +112,7 @@ class MonthlyReportsController extends Controller
                     $shares = $total_weight * 2;
                 }
             } else {
-                $shares = null; // No shares for ghee/butter
+                $shares = null;
             }
 
             $unit = in_array($type, ['ghee', 'butter']) ? 'kg' : 'L';
@@ -173,7 +172,7 @@ class MonthlyReportsController extends Controller
 
         $rates = RateMaster::latest('id')
             ->get()
-            ->pluck('rate', 'rate_type') // ['cow' => 60, 'bufflo' => 70]
+            ->pluck('rate', 'rate_type')
             ->mapWithKeys(fn($rate, $type) => [strtolower($type) => $rate]);
 
         $data = $customers->map(function ($customer) use ($startDate, $endDate, $rates) {
@@ -182,7 +181,7 @@ class MonthlyReportsController extends Controller
                 ->get();
 
             if ($deliveries->isEmpty()) {
-                return null; // Skip customers with no data
+                return null;
             }
 
             $grouped = $deliveries->groupBy(fn($d) => strtolower($d->type));
@@ -217,7 +216,7 @@ class MonthlyReportsController extends Controller
                 'startDate' => $startDate->format('d-m-Y'),
                 'endDate' => $endDate->format('d-m-Y'),
             ];
-        })->filter(); // Filter out nulls
+        })->filter();
 
         if ($data->isEmpty()) {
             return back()->with('error', 'No milk delivery records found for the selected customers.');
