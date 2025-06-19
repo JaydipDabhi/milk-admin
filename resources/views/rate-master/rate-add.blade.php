@@ -29,9 +29,9 @@
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group">
-                                        <label for="rate_type">Rate Type (Cow/Bufflo)</label>
+                                        <label for="rate_type">Rate Type (Cow/Buffalo)</label>
                                         <input type="text" class="form-control @error('rate_type') is-invalid @enderror"
-                                            id="rate_type" name="rate_type" placeholder="Enter Type (Cow/Bufflo)"
+                                            id="rate_type" name="rate_type" placeholder="Enter Type (Cow/Buffalo)"
                                             value="{{ old('rate_type') }}">
                                         @error('rate_type')
                                             <span class="text-danger">{{ $message }}</span>

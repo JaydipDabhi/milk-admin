@@ -99,7 +99,7 @@ class MonthlyReportsController extends Controller
             $total_weight = $deliveries->sum('weight');
             $total_amount = $deliveries->sum('total_rate');
 
-            if (in_array($type, ['cow', 'bufflo'])) {
+            if (in_array($type, ['cow', 'buffalo'])) {
                 if ($total_weight == 0.25) {
                     $shares = 0.5;
                 } elseif ($total_weight == 0.5) {
@@ -135,20 +135,20 @@ class MonthlyReportsController extends Controller
         $customers = Customer::whereIn('id', $customerIds)->get();
 
         $cowRate = RateMaster::where('rate_type', 'cow')->latest('id')->value('rate') ?? 0;
-        $buffloRate = RateMaster::where('rate_type', 'bufflo')->latest('id')->value('rate') ?? 0;
+        $buffaloRate = RateMaster::where('rate_type', 'buffalo')->latest('id')->value('rate') ?? 0;
 
-        $data = $customers->map(function ($customer) use ($cowRate, $buffloRate) {
+        $data = $customers->map(function ($customer) use ($cowRate, $buffaloRate) {
             $deliveries = MilkDelivery::where('customer_id', $customer->id)->get();
 
             $cowMilk = $deliveries->where('type', 'cow')->sum('weight');
-            $buffloMilk = $deliveries->where('type', 'bufflo')->sum('weight');
+            $buffaloMilk = $deliveries->where('type', 'buffalo')->sum('weight');
 
             return [
                 'customer' => $customer,
                 'cowMilk' => $cowMilk,
-                'buffloMilk' => $buffloMilk,
+                'buffaloMilk' => $buffaloMilk,
                 'cowRate' => $cowRate,
-                'buffloRate' => $buffloRate,
+                'buffaloRate' => $buffaloRate,
             ];
         });
 

@@ -40,7 +40,7 @@
                             <div class="card-header">
                                 <h3 class="card-title">Add Milk Delivery</h3>
                             </div>
-                            <form method="POST" action="{{ route('admin.admin.milk_delivery_store') }}" id="milkAddForm">
+                            <form method="POST" action="{{ route('admin.milk_delivery_store') }}" id="milkAddForm">
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group">

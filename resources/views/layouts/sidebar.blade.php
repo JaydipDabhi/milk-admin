@@ -128,8 +128,12 @@
                     $reportMenuOpen = request()->routeIs(
                         'reports.full_reports',
                         'reports.monthly_report_form',
+                        'reports.generate_monthly_report',
                         'reports.yearly_report_form',
+                        'reports.generate_yearly_report',
+                        'reports.full_reports',
                         'reports.print_reports',
+                        'reports.print_reports_pdf',
                     );
                 @endphp
                 <li class="nav-item {{ $reportMenuOpen ? 'menu-open' : '' }}">
@@ -150,21 +154,21 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('reports.monthly_report_form') }}"
-                                class="nav-link {{ request()->routeIs('reports.monthly_report_form') ? 'active' : '' }}">
+                                class="nav-link {{ request()->routeIs('reports.monthly_report_form', 'reports.generate_monthly_report') ? 'active' : '' }}">
                                 <i class="fas fa-calendar-alt nav-icon"></i>
                                 <p>Monthly Reports</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('reports.yearly_report_form') }}"
-                                class="nav-link {{ request()->routeIs('reports.yearly_report_form') ? 'active' : '' }}">
+                                class="nav-link {{ request()->routeIs('reports.yearly_report_form', 'reports.generate_yearly_report') ? 'active' : '' }}">
                                 <i class="fas fa-calendar nav-icon"></i>
                                 <p>Yearly Reports</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('reports.print_reports') }}"
-                                class="nav-link {{ request()->routeIs('reports.print_reports') ? 'active' : '' }}">
+                                class="nav-link {{ request()->routeIs('reports.print_reports', 'reports.print_reports_pdf') ? 'active' : '' }}">
                                 <i class="fas fa-print nav-icon"></i>
                                 <p>Print Monthly Reports</p>
                             </a>
