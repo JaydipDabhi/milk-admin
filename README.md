@@ -61,22 +61,36 @@ A Laravel-based admin panel for managing milk delivery operations, including cus
     php artisan storage:link
     ```
 
-7. **Generate application key**:
+7. **Laravel DomPDF**:
+   Require this package in your composer.json and update composer. This will download the package and the dompdf + fontlib libraries also.
+
+    ```
+    composer require barryvdh/laravel-dompdf
+    ```
+
+8. **Laravel DomPDF Configuration**:
+   The defaults configuration settings are set in `config/dompdf.php`. Copy this file to your own config directory to modify the values. You can publish the config using this command:
+
+    ```
+    php artisan vendor:publish --provider="Barryvdh\DomPDF\ServiceProvider"
+    ```
+
+9. **Generate application key**:
    Laravel requires an application key for encryption and other security purposes. Generate the application key by running:
 
     ```
     php artisan key:generate
     ```
 
-8. **Run database migrations**:
-   Laravel includes migrations to create the required database tables. Run the following command to set up the database schema:
+10. **Run database migrations**:
+    Laravel includes migrations to create the required database tables. Run the following command to set up the database schema:
 
     ```
     php artisan migrate
     ```
 
-9. **Run the Laravel development server**:
-   Start Laravel’s built-in development server by running:
+11. **Run the Laravel development server**:
+    Start Laravel’s built-in development server by running:
 
     ```
     php artisan serve
