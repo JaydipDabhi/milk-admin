@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('customer_id')->nullable();
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('set null');
-            $table->string('weight');
+            $table->decimal('weight', 8, 2);
             $table->string('type');
-            $table->string('rate');
+            $table->decimal('rate', 8, 2);
+            $table->decimal('total_rate', 10, 2);
             $table->string('time');
             $table->timestamps();
         });
