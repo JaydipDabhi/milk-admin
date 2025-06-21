@@ -17,6 +17,9 @@ class CustomerController extends Controller
 
     public function customer_create()
     {
+        if (Auth::user()->role !== 'Super Admin') {
+            return redirect()->route('admin.customer_list')->with('error', 'You cannot create a customer.');
+        }
         $rateTypes = RateMaster::select('rate_type')->distinct()->pluck('rate_type');
         return view('customer.customer-add', compact('rateTypes'));
     }
