@@ -31,9 +31,9 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <!-- Cow Milk -->
+                    {{-- <!-- Cow Milk -->
                     <div class="col-lg-3 col-6">
-                        <div class="small-box bg-info">
+                        <div class="small-box bg-info text-white">
                             <div class="inner">
                                 <h3>{{ number_format($cowMilkSales, 2) }} L</h3>
                                 <p>Cow Milk Sales (This Year)</p>
@@ -46,10 +46,69 @@
 
                     <!-- Buffalo Milk -->
                     <div class="col-lg-3 col-6">
-                        <div class="small-box bg-primary">
+                        <div class="small-box bg-primary text-white">
                             <div class="inner">
                                 <h3>{{ number_format($buffaloMilkSales, 2) }} L</h3>
                                 <p>Buffalo Milk Sales (This Year)</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-hippo"></i>
+                            </div>
+                        </div>
+                    </div> --}}
+                    <!-- Cow Milk -->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-info text-white">
+                            <div class="inner">
+                                @php
+                                    $cowShares = $cowMilkSales * 2;
+                                @endphp
+                                <h3>{{ number_format($cowMilkSales, 2) }} L</h3>
+                                <p>Cow Milk (This Year)</p>
+                                <small>{{ number_format($cowShares, 2) }} Shares</small>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-hippo"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Buffalo Milk -->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-primary text-white">
+                            <div class="inner">
+                                @php
+                                    $buffaloShares = $buffaloMilkSales * 2;
+                                @endphp
+                                <h3>{{ number_format($buffaloMilkSales, 2) }} L</h3>
+                                <p>Buffalo Milk (This Year)</p>
+                                <small>{{ number_format($buffaloShares, 2) }} Shares</small>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-hippo"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ghee Sales -->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-warning text-white">
+                            <div class="inner">
+                                <h3>{{ number_format($gheeSales, 2) }} Kg</h3>
+                                <p>Ghee Sales (This Year)</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-hippo"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Butter Sales -->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-secondary text-white">
+                            <div class="inner">
+                                <h3>{{ number_format($butterSales, 2) }} Kg</h3>
+                                <p>Butter Sales (This Year)</p>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-hippo"></i>
@@ -59,7 +118,7 @@
 
                     <!-- Total Revenue -->
                     <div class="col-lg-3 col-6">
-                        <div class="small-box bg-success">
+                        <div class="small-box bg-success text-white">
                             <div class="inner">
                                 <h3>₹ {{ number_format($totalRate, 2) }}</h3>
                                 <p>Total Revenue (This Year)</p>
@@ -72,20 +131,22 @@
 
                     <!-- Customer Count -->
                     <div class="col-lg-3 col-6">
-                        <div class="small-box bg-warning">
-                            <div class="inner">
-                                <h3>{{ $customerCount }}</h3>
-                                <p>Customers</p>
+                        <a href="{{ route('admin.customer_list') }}">
+                            <div class="small-box bg-danger text-white">
+                                <div class="inner">
+                                    <h3>{{ $customerCount }}</h3>
+                                    <p>Customers</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-user-friends"></i>
+                                </div>
                             </div>
-                            <div class="icon">
-                                <i class="fas fa-user-friends"></i>
-                            </div>
-                        </div>
+                        </a>
                     </div>
 
                     <!-- User Count -->
                     <div class="col-lg-3 col-6">
-                        <div class="small-box bg-danger">
+                        <div class="small-box bg-dark text-white">
                             <div class="inner">
                                 <h3>{{ $userCount }}</h3>
                                 <p>Users</p>
@@ -96,7 +157,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </section>
     </div>

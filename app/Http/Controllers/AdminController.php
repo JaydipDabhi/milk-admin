@@ -32,17 +32,28 @@ class AdminController extends Controller
             ->whereYear('created_at', $year)
             ->sum('weight');
 
+        $gheeSales = MilkDelivery::where('type', 'ghee')
+            ->whereYear('created_at', $year)
+            ->sum('weight');
+
+        $butterSales = MilkDelivery::where('type', 'butter')
+            ->whereYear('created_at', $year)
+            ->sum('weight');
+
         // Total revenue (cow + buffalo)
         $totalRate = MilkDelivery::whereYear('created_at', $year)
             ->select(DB::raw('SUM(weight * rate) as total'))
             ->value('total');
 
         $customerCount = Customer::count();
-        $userCount = User::count();
+        // $userCount = User::count();
+        $userCount = User::where('role', '!=', 'Super Admin')->count();
 
         return view('dashboard.dashboard', [
             'cowMilkSales' => $cowMilkSales,
             'buffaloMilkSales' => $buffaloMilkSales,
+            'gheeSales' => $gheeSales,
+            'butterSales' => $butterSales,
             'totalRate' => $totalRate,
             'customerCount' => $customerCount,
             'userCount' => $userCount,
