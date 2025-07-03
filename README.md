@@ -37,7 +37,7 @@ A Laravel-based admin panel for managing milk delivery operations, including cus
    This project uses Composer to manage PHP dependencies. To install them, run the following command:
 
     ```
-    composer install
+    composer update
     ```
 
 4. **Copy .env.example to .env**:
