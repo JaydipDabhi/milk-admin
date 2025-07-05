@@ -83,24 +83,6 @@
 
         <section class="content">
             <div class="container-fluid">
-                {{-- 
-                @php
-                    $alerts = [
-                        'success' => 'success',
-                        'success_delete' => 'danger',
-                        'success_update' => 'info',
-                    ];
-                @endphp
-
-                @foreach ($alerts as $key => $type)
-                    @if (session($key))
-                        <div class="alert alert-{{ $type }} alert-dismissible fade show" role="alert">
-                            {{ session($key) }}
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        </div>
-                    @endif
-                @endforeach --}}
-
                 <div class="row">
                     <div class="col-12">
                         <div class="card">

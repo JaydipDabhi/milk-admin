@@ -117,4 +117,30 @@ class MilkDairyController extends Controller
         $milkDairy->delete();
         return redirect()->route('milk_dairy.summary')->with('success_delete', 'Milk entry deleted successfully.');
     }
+
+    public function ten_days_reports(Request $request)
+    {
+        // Parse from GET or fallback to current month
+        $startDate = $request->input('start_date')
+            ? Carbon::parse($request->input('start_date'))->startOfDay()
+            : Carbon::now()->startOfMonth();
+
+        $endDate = $request->input('end_date')
+            ? Carbon::parse($request->input('end_date'))->endOfDay()
+            : Carbon::now()->endOfMonth();
+
+        // Fetch entries between the selected dates
+        $entries = MilkDairy::whereBetween('created_at', [$startDate, $endDate])
+            ->orderBy('created_at')
+            ->get();
+
+        // Group by 10-day segments
+        $grouped = $entries->groupBy(function ($entry) {
+            $day = Carbon::parse($entry->created_at)->day;
+            return $day <= 10 ? '1-10'
+                : ($day <= 20 ? '11-20' : '21-end');
+        });
+
+        return view('milk-dairy.ten-days-reports', compact('grouped', 'startDate', 'endDate'));
+    }
 }

@@ -177,7 +177,12 @@
 
                 {{-- Milk Dairy --}}
                 @php
-                    $dairyMenuOpen = request()->routeIs('milk_dairy.summary', 'milk_dairy.create', 'milk_dairy.edit');
+                    $dairyMenuOpen = request()->routeIs(
+                        'milk_dairy.summary',
+                        'milk_dairy.create',
+                        'milk_dairy.edit',
+                        'milk_dairy.ten_days_reports',
+                    );
                 @endphp
                 <li class="nav-item {{ $dairyMenuOpen ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ $dairyMenuOpen ? 'active' : '' }}">
@@ -193,6 +198,13 @@
                                 class="nav-link {{ request()->routeIs('milk_dairy.summary', 'milk_dairy.create', 'milk_dairy.edit') ? 'active' : '' }}">
                                 <i class="fas fa-clipboard nav-icon"></i>
                                 <p>Dairy Daily Report</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('milk_dairy.ten_days_reports') }}"
+                                class="nav-link {{ request()->routeIs('milk_dairy.ten_days_reports') ? 'active' : '' }}">
+                                <i class="fas fa-clipboard nav-icon"></i>
+                                <p>10 Days Dairy Reports</p>
                             </a>
                         </li>
                     </ul>

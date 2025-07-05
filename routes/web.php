@@ -120,5 +120,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit/{milkDairy}', [MilkDairyController::class, 'edit'])->name('edit');
         Route::put('/update/{milkDairy}', [MilkDairyController::class, 'update'])->name('update');
         Route::delete('/delete/{milkDairy}', [MilkDairyController::class, 'destroy'])->name('destroy');
+
+        Route::get('/ten-days-reports', [MilkDairyController::class, 'ten_days_reports'])->name('ten_days_reports');
     });
 });
