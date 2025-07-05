@@ -4,6 +4,7 @@ $(function () {
             responsive: true,
             lengthChange: false,
             autoWidth: false,
+            order: [[0, "desc"]],
             buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
         })
         .buttons()
@@ -78,6 +79,21 @@ function confirmMilkDeliveryDelete(deliveryId) {
     }).then((result) => {
         if (result.isConfirmed) {
             document.getElementById("delete-form-" + deliveryId).submit();
+        }
+    });
+}
+function confirmDairyDelete(id) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "This Milk Delivery will be permanently deleted!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById("delete-form-" + id).submit();
         }
     });
 }

@@ -81,7 +81,7 @@
                 @endphp
                 <li class="nav-item {{ $milkMenuOpen ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ $milkMenuOpen ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-clipboard-list"></i>
+                        <i class="nav-icon fas fa-truck"></i>
                         <p>
                             Milk Delivery
                             <i class="right fas fa-angle-left"></i>
@@ -131,7 +131,6 @@
                         'reports.generate_monthly_report',
                         'reports.yearly_report_form',
                         'reports.generate_yearly_report',
-                        'reports.full_reports',
                         'reports.print_reports',
                         'reports.print_reports_pdf',
                     );
@@ -148,37 +147,58 @@
                         <li class="nav-item">
                             <a href="{{ route('reports.full_reports') }}"
                                 class="nav-link {{ request()->routeIs('reports.full_reports') ? 'active' : '' }}">
-                                <i class="fas fa-list-alt nav-icon"></i>
+                                <i class="fas fa-clipboard-list nav-icon"></i>
                                 <p>All Over Full Reports</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('reports.monthly_report_form') }}"
                                 class="nav-link {{ request()->routeIs('reports.monthly_report_form', 'reports.generate_monthly_report') ? 'active' : '' }}">
-                                <i class="fas fa-calendar-alt nav-icon"></i>
+                                <i class="far fa-calendar-alt nav-icon"></i>
                                 <p>Monthly Reports</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('reports.yearly_report_form') }}"
                                 class="nav-link {{ request()->routeIs('reports.yearly_report_form', 'reports.generate_yearly_report') ? 'active' : '' }}">
-                                <i class="fas fa-calendar nav-icon"></i>
+                                <i class="far fa-calendar nav-icon"></i>
                                 <p>Yearly Reports</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('reports.print_reports') }}"
                                 class="nav-link {{ request()->routeIs('reports.print_reports', 'reports.print_reports_pdf') ? 'active' : '' }}">
-                                <i class="fas fa-print nav-icon"></i>
+                                <i class="fas fa-file-pdf nav-icon"></i>
                                 <p>Print Monthly Reports</p>
                             </a>
                         </li>
                     </ul>
+                </li>
 
+                {{-- Milk Dairy --}}
+                @php
+                    $dairyMenuOpen = request()->routeIs('milk_dairy.summary', 'milk_dairy.create', 'milk_dairy.edit');
+                @endphp
+                <li class="nav-item {{ $dairyMenuOpen ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ $dairyMenuOpen ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-truck"></i>
+                        <p>
+                            Milk Dairy
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('milk_dairy.summary') }}"
+                                class="nav-link {{ request()->routeIs('milk_dairy.summary', 'milk_dairy.create', 'milk_dairy.edit') ? 'active' : '' }}">
+                                <i class="fas fa-clipboard nav-icon"></i>
+                                <p>Dairy Daily Report</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
 
         </nav>
-
     </div>
 </aside>

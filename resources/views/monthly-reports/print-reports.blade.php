@@ -1,8 +1,23 @@
 @extends('layouts.index')
 @section('title', 'Print Reports')
-
 @section('content')
     <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Print Reports</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Home</a></li>
+                            <li class="breadcrumb-item active">Print Reports</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="content">
             <div class="container-fluid">
                 <form method="GET" action="{{ route('reports.print_reports_pdf') }}">
@@ -10,8 +25,8 @@
                         <div class="card-header">
                             <div class="row w-100 align-items-center">
                                 <div class="col-md-6">
-                                    <h3 class="card-title mb-0">
-                                        <i class="fas fa-users mr-2"></i> Select Customers for PDF Report
+                                    <h3 class="card-title">
+                                        <i class="fas fa-print mr-2"></i> Generate Customer PDF Reports
                                     </h3>
                                 </div>
                                 <div class="col-md-6 text-right">
@@ -21,7 +36,6 @@
                                 </div>
                             </div>
                         </div>
-
 
                         <div class="card-body">
                             <div class="form-row align-items-end mb-4">
@@ -49,11 +63,11 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-4">
-                                    <div class="form-check mt-4">
+                                <div class="col-md-4 mt-4">
+                                    <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="select_all">
                                         <label class="form-check-label font-weight-bold" for="select_all">
-                                            <i class="fas fa-check-double text-primary mr-1"></i>Select All Customers
+                                            <i class="fas fa-check-double text-primary mr-1"></i> Select All Customers
                                         </label>
                                     </div>
                                 </div>
@@ -61,7 +75,7 @@
 
                             <div class="row">
                                 @foreach (App\Models\Customer::all() as $cust)
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 col-sm-4 col-6">
                                         <div class="card card-light shadow-sm mb-3">
                                             <div class="card-body py-2 px-3">
                                                 <div class="form-check">
@@ -87,7 +101,6 @@
 @endsection
 
 @push('scripts')
-    <!-- Select2 Init & Checkbox Logic -->
     <script>
         $(function() {
             $('#select_all').on('change', function() {

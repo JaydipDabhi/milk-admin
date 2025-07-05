@@ -1,11 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\MilkDairyController;
+use App\Http\Controllers\RateMasterController;
 use App\Http\Controllers\MilkDeliveryController;
 use App\Http\Controllers\MonthlyReportsController;
-use App\Http\Controllers\RateMasterController;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -108,5 +109,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/full-reports', [MonthlyReportsController::class, 'full_reports'])->name('full_reports');
         Route::get('/print-reports', [MonthlyReportsController::class, 'print_reports'])->name('print_reports');
         Route::get('/print-reports/pdf', [MonthlyReportsController::class, 'download_pdf'])->name('print_reports_pdf');
+    });
+
+    Route::prefix('milk-dairy')->name('milk_dairy.')->group(function () {
+        Route::get('/summary', [MilkDairyController::class, 'summary'])->name('summary');
+        Route::get('/create', [MilkDairyController::class, 'create'])->name('create');
+        Route::post('/store', [MilkDairyController::class, 'store'])->name('store');
+        Route::post('/prev-total', [MilkDairyController::class, 'prevTotal'])
+            ->name('prev_total');
+        Route::get('/edit/{milkDairy}', [MilkDairyController::class, 'edit'])->name('edit');
+        Route::put('/update/{milkDairy}', [MilkDairyController::class, 'update'])->name('update');
+        Route::delete('/delete/{milkDairy}', [MilkDairyController::class, 'destroy'])->name('destroy');
     });
 });
