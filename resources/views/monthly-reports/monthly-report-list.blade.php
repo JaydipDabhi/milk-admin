@@ -26,15 +26,14 @@
                     <div class="card-header">
                         <h3 class="card-title"><i class="fas fa-filter"></i> Filter by Customer</h3>
                     </div>
-                    <form method="GET" action="{{ route('reports.generate_monthly_report') }}">
+                    <form method="GET" action="{{ route('reports.generate_monthly_report') }}" id="monthlyForm">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="customer_id">Customer</label>
                                         <select name="customer_id"
-                                            class="form-control select2 @error('customer_id') is-invalid @enderror"
-                                            required>
+                                            class="form-control select2 @error('customer_id') is-invalid @enderror">
                                             <option value="">-- Select Customer --</option>
                                             @foreach ($customers as $customer)
                                                 <option value="{{ $customer->id }}"
@@ -53,7 +52,8 @@
                                     <div class="form-group">
                                         <label for="month">Month</label>
                                         <select name="month"
-                                            class="form-control select2 @error('month') is-invalid @enderror" required>
+                                            class="form-control select2 @error('month') is-invalid @enderror">
+                                            <option value="">-- Select Month --</option>
                                             @foreach (range(1, 12) as $m)
                                                 <option value="{{ $m }}"
                                                     {{ request('month') == $m ? 'selected' : '' }}>
@@ -71,7 +71,8 @@
                                     <div class="form-group">
                                         <label for="year">Year</label>
                                         <select name="year"
-                                            class="form-control select2 @error('year') is-invalid @enderror" required>
+                                            class="form-control select2 @error('year') is-invalid @enderror">
+                                            <option value="">-- Select Year --</option>
                                             @for ($y = now()->year; $y >= 2020; $y--)
                                                 <option value="{{ $y }}"
                                                     {{ request('year') == $y ? 'selected' : '' }}>
@@ -205,11 +206,65 @@
             $('.select2').select2({
                 width: '100%'
             });
+
             $('#reportTable').DataTable({
                 responsive: true,
                 autoWidth: false,
                 ordering: true,
                 pageLength: 10,
+            });
+
+            // jQuery Validation for the filter form
+            $('#monthlyForm').first().validate({
+                rules: {
+                    customer_id: {
+                        required: true
+                    },
+                    month: {
+                        required: true,
+                        digits: true,
+                        min: 1,
+                        max: 12
+                    },
+                    year: {
+                        required: true,
+                        digits: true,
+                        min: 2020,
+                        max: new Date().getFullYear()
+                    }
+                },
+                messages: {
+                    customer_id: {
+                        required: "Please select a customer"
+                    },
+                    month: {
+                        required: "Please select a month",
+                        digits: "Invalid month format",
+                        min: "Invalid month",
+                        max: "Invalid month"
+                    },
+                    year: {
+                        required: "Please select a year",
+                        digits: "Invalid year format",
+                        min: "Year must be 2020 or later",
+                        max: "Year cannot be in the future"
+                    }
+                },
+                errorElement: 'span',
+                errorClass: 'text-danger',
+                highlight: function(element) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('is-invalid');
+                },
+                errorPlacement: function(error, element) {
+                    if (element.hasClass('select2-hidden-accessible')) {
+                        error.insertAfter(element.next('.select2-container'));
+                    } else {
+                        error.insertAfter(element);
+                    }
+                }
             });
         });
     </script>

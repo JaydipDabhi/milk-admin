@@ -29,7 +29,7 @@
                         <h3 class="card-title"><i class="fas fa-filter"></i> Filter Yearly Report</h3>
                     </div>
 
-                    <form method="GET" action="{{ route('reports.generate_yearly_report') }}">
+                    <form method="GET" action="{{ route('reports.generate_yearly_report') }}" id="yearlyForm">
                         <div class="card-body">
                             <div class="form-row">
                                 <div class="form-group col-md-4 mb-2">
@@ -162,3 +162,53 @@
         @endif
     </div>
 @endsection
+@push('scripts')
+    <script>
+        $(function() {
+            $('.select2').select2({
+                width: '100%'
+            });
+
+            // jQuery Validation
+            $('#yearlyForm').first().validate({
+                rules: {
+                    year: {
+                        required: true,
+                        digits: true,
+                        min: 2000,
+                        max: new Date().getFullYear()
+                    },
+                    type: {
+                        required: true
+                    }
+                },
+                messages: {
+                    year: {
+                        required: "Please enter a year",
+                        digits: "Please enter a valid numeric year",
+                        min: "Year must be 2000 or later",
+                        max: "Year cannot be in the future"
+                    },
+                    type: {
+                        required: "Please select a type"
+                    }
+                },
+                errorElement: 'span',
+                errorClass: 'text-danger',
+                highlight: function(element) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('is-invalid');
+                },
+                errorPlacement: function(error, element) {
+                    if (element.hasClass('select2-hidden-accessible')) {
+                        error.insertAfter(element.next('.select2-container'));
+                    } else {
+                        error.insertAfter(element);
+                    }
+                }
+            });
+        });
+    </script>
+@endpush

@@ -20,7 +20,7 @@
 
         <section class="content">
             <div class="container-fluid">
-                <form method="GET" action="{{ route('reports.print_reports_pdf') }}">
+                <form method="GET" action="{{ route('reports.print_reports_pdf') }}" id="printform">
                     <div class="card card-info card-outline">
                         <div class="card-header">
                             <div class="row w-100 align-items-center">
@@ -41,7 +41,8 @@
                             <div class="form-row align-items-end mb-4">
                                 <div class="col-md-4">
                                     <label for="month" class="font-weight-bold">Select Month</label>
-                                    <select class="form-control select2" name="month" id="month" required>
+                                    <select class="form-control select2" name="month" id="month">
+                                        <option value="">-- Select Month --</option>
                                         @foreach (range(1, 12) as $m)
                                             <option value="{{ $m }}"
                                                 {{ request('month') == $m ? 'selected' : '' }}>
@@ -53,7 +54,8 @@
 
                                 <div class="col-md-4">
                                     <label for="year" class="font-weight-bold">Select Year</label>
-                                    <select class="form-control select2" name="year" id="year" required>
+                                    <select class="form-control select2" name="year" id="year">
+                                        <option value="">-- Select Year --</option>
                                         @for ($y = date('Y'); $y >= 2020; $y--)
                                             <option value="{{ $y }}"
                                                 {{ request('year') == $y ? 'selected' : '' }}>
@@ -103,14 +105,76 @@
 @push('scripts')
     <script>
         $(function() {
+            $('.select2').select2({
+                width: '100%'
+            });
+
+            // Handle Select All functionality
             $('#select_all').on('change', function() {
                 $('.customer-checkbox').prop('checked', this.checked);
             });
 
             $('.customer-checkbox').on('change', function() {
-                $('#select_all').prop('checked',
+                $('#select_all').prop(
+                    'checked',
                     $('.customer-checkbox:checked').length === $('.customer-checkbox').length
                 );
+            });
+
+            // jQuery Validation
+            $('#printform').validate({
+                ignore: [],
+                rules: {
+                    month: {
+                        required: true,
+                        digits: true,
+                        min: 1,
+                        max: 12
+                    },
+                    year: {
+                        required: true,
+                        digits: true,
+                        min: 2020,
+                        max: new Date().getFullYear()
+                    },
+                    'customer_ids[]': {
+                        required: true
+                    }
+                },
+                messages: {
+                    month: {
+                        required: "Please select a month",
+                        digits: "Invalid month",
+                        min: "Invalid month",
+                        max: "Invalid month"
+                    },
+                    year: {
+                        required: "Please select a year",
+                        digits: "Invalid year",
+                        min: "Year must be 2020 or later",
+                        max: "Year cannot be in the future"
+                    },
+                    'customer_ids[]': {
+                        required: "Please select at least one customer"
+                    }
+                },
+                errorElement: 'span',
+                errorClass: 'text-danger',
+                highlight: function(element) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('is-invalid');
+                },
+                errorPlacement: function(error, element) {
+                    if (element.hasClass('select2-hidden-accessible')) {
+                        error.insertAfter(element.next('.select2-container'));
+                    } else if (element.attr('name') === 'customer_ids[]') {
+                        error.insertAfter($('.customer-checkbox').last().closest('.row'));
+                    } else {
+                        error.insertAfter(element);
+                    }
+                }
             });
         });
     </script>
