@@ -39,6 +39,23 @@
                                     </tr>
 
                                     <tr>
+                                        <th>Date</th>
+                                        <td>
+                                            {{-- <input type="date" name="created_at" id="created_at"
+                                                class="form-control @error('created_at') is-invalid @enderror"
+                                                value="{{ old('created_at', now()->toDateString()) }}"
+                                                max="{{ now()->toDateString() }}" autocomplete="off"> --}}
+                                            <input type="date" name="created_at" id="created_at"
+                                                class="form-control @error('created_at') is-invalid @enderror"
+                                                value="{{ old('created_at', $milkDairy->created_at->toDateString()) }}"
+                                                max="{{ now()->toDateString() }}" autocomplete="off">
+                                            @error('created_at')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </td>
+                                    </tr>
+
+                                    <tr>
                                         <th>Shift</th>
                                         <td>
                                             @php $shiftOld = old('shift',$milkDairy->shift); @endphp
@@ -162,6 +179,10 @@
                 $('#total_amount').val(amt ? (prevTotal + amt).toFixed(2) : '');
             }
 
+            $.validator.addMethod("notFutureDate", function(value, element) {
+                const today = new Date().toISOString().split('T')[0]; // 'YYYY-MM-DD'
+                return value <= today;
+            }, "Date cannot be in the future.");
 
             /* ---------- jQuery Validation rules & messages ---------- */
             $('#milkDairyForm').validate({
@@ -171,17 +192,20 @@
 
                 // where to place radio‑group errors
                 errorPlacement: function(error, element) {
-                    if (element.attr('name') === 'shift') {
-                        error.insertAfter(element.closest('td')); // one message per group
-                    } else {
-                        error.insertAfter(element); // default
-                    }
+                    element.attr('name') === 'shift' ?
+                        error.insertAfter(element.closest('td')) :
+                        error.insertAfter(element);
                 },
 
                 highlight: el => $(el).addClass('is-invalid'),
                 unhighlight: el => $(el).removeClass('is-invalid'),
 
                 rules: {
+                    created_at: {
+                        required: true,
+                        dateISO: true,
+                        notFutureDate: true
+                    },
                     customer_no_in_dairy: {
                         required: true,
                         number: true,
@@ -209,6 +233,11 @@
                 },
 
                 messages: {
+                    created_at: {
+                        required: 'Date is required.',
+                        dateISO: 'Use a valid date (YYYY-MM-DD).',
+                        notFutureDate: 'Date cannot be in the future.'
+                    },
                     customer_no_in_dairy: {
                         required: 'Customer number is required.',
                         number: 'Customer number must be a numeric value.',

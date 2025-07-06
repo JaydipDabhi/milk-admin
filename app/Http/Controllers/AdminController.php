@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
-use App\Models\MilkDelivery;
-use App\Models\RateMaster;
-use App\Models\User;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Customer;
+use App\Models\MilkDairy;
+use App\Models\RateMaster;
+use App\Models\MilkDelivery;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 
@@ -36,27 +37,27 @@ class AdminController extends Controller
             ->whereYear('created_at', $year)
             ->sum('weight');
 
-        $butterSales = MilkDelivery::where('type', 'butter')
-            ->whereYear('created_at', $year)
-            ->sum('weight');
-
         // Total revenue (cow + buffalo)
         $totalRate = MilkDelivery::whereYear('created_at', $year)
             ->select(DB::raw('SUM(weight * rate) as total'))
             ->value('total');
 
         $customerCount = Customer::count();
-        // $userCount = User::count();
         $userCount = User::where('role', '!=', 'Super Admin')->count();
+
+        $totalMilkRevenue = MilkDairy::whereYear('created_at', now()->year)->sum('amount');
+
+        $grandTotal = $totalRate + $totalMilkRevenue;
 
         return view('dashboard.dashboard', [
             'cowMilkSales' => $cowMilkSales,
             'buffaloMilkSales' => $buffaloMilkSales,
             'gheeSales' => $gheeSales,
-            'butterSales' => $butterSales,
             'totalRate' => $totalRate,
             'customerCount' => $customerCount,
+            'grandTotal' => $grandTotal,
             'userCount' => $userCount,
+            'totalMilkRevenue' => $totalMilkRevenue,
         ]);
     }
 

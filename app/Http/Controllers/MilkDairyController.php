@@ -11,14 +11,44 @@ use Illuminate\Support\Facades\Redirect;
 
 class MilkDairyController extends Controller
 {
+    // public function summary()
+    // {
+    //     $entries = MilkDairy::all();
+    //     $totalsByCustomer = MilkDairy::select('customer_no_in_dairy', DB::raw('SUM(amount) as total_amount'))
+    //         ->groupBy('customer_no_in_dairy')
+    //         ->get();
+    //     $subTotalAmount = $totalsByCustomer->sum('total_amount');
+    //     return view('milk-dairy.summary', compact('entries', 'totalsByCustomer', 'subTotalAmount'));
+    // }
     public function summary()
     {
         $entries = MilkDairy::all();
+
+        // Totals per customer
         $totalsByCustomer = MilkDairy::select('customer_no_in_dairy', DB::raw('SUM(amount) as total_amount'))
             ->groupBy('customer_no_in_dairy')
             ->get();
+
+        // Subtotal amount for all customers
         $subTotalAmount = $totalsByCustomer->sum('total_amount');
-        return view('milk-dairy.summary', compact('entries', 'totalsByCustomer', 'subTotalAmount'));
+
+        // Calculated totals
+        $totalMilk = $entries->sum('milk_weight');
+        $totalFat = $entries->sum('fat_in_percentage');
+        $totalRate = $entries->sum('rate_per_liter');
+        $totalAmount = $entries->sum('amount');
+        $entryCount = $entries->count();
+
+        return view('milk-dairy.summary', compact(
+            'entries',
+            'totalsByCustomer',
+            'subTotalAmount',
+            'totalMilk',
+            'totalFat',
+            'totalRate',
+            'totalAmount',
+            'entryCount'
+        ));
     }
 
     public function create()
@@ -29,26 +59,66 @@ class MilkDairyController extends Controller
         return view('milk-dairy.milk-dairy-add');
     }
 
+    // public function store(Request $request)
+    // {
+    //     if (Auth::user()->role !== 'Super Admin') {
+    //         return redirect()->route('milk_dairy.summary')->with('error', 'You are not authorized to store dairy data.');
+    //     }
+    //     $validated = $request->validate([
+    //         'customer_no_in_dairy' => ['required', 'numeric'],
+    //         'milk_weight'          => ['required', 'numeric', 'min:0.01'],
+    //         'fat_in_percentage'    => ['required', 'numeric', 'min:0', 'max:15'],
+    //         'rate_per_liter'       => ['required', 'numeric', 'min:0'],
+    //     ]);
+
+    //     $validated['amount'] = round($validated['milk_weight'] * $validated['rate_per_liter'], 2);
+    //     $prevTotal = MilkDairy::where('customer_no_in_dairy', $validated['customer_no_in_dairy'])
+    //         ->sum('amount');
+    //     $validated['total_amount'] = $prevTotal + $validated['amount'];
+
+    //     MilkDairy::create($validated);
+
+    //     return redirect()->route('milk_dairy.summary')
+    //         ->with('success', 'Milk entry added successfully.');
+    // }
     public function store(Request $request)
     {
+        // 1. Authorisation ---------------------------------------------------
         if (Auth::user()->role !== 'Super Admin') {
-            return redirect()->route('milk_dairy.summary')->with('error', 'You are not authorized to store dairy data.');
+            return redirect()
+                ->route('milk_dairy.summary')
+                ->with('error', 'You are not authorized to store dairy data.');
         }
-        $validated = $request->validate([
-            'customer_no_in_dairy' => ['required', 'numeric'],
-            'milk_weight'          => ['required', 'numeric', 'min:0.01'],
-            'fat_in_percentage'    => ['required', 'numeric', 'min:0', 'max:15'],
-            'rate_per_liter'       => ['required', 'numeric', 'min:0'],
-        ]);
 
-        $validated['amount'] = round($validated['milk_weight'] * $validated['rate_per_liter'], 2);
-        $prevTotal = MilkDairy::where('customer_no_in_dairy', $validated['customer_no_in_dairy'])
-            ->sum('amount');
-        $validated['total_amount'] = $prevTotal + $validated['amount'];
+        // 2. Validation ------------------------------------------------------
+        $validated = $request->validate([
+            'customer_no_in_dairy' => ['required', 'numeric', 'min:1'],
+            'shift'               => ['required', 'in:Morning,Evening'],
+            'created_at'          => ['required', 'date', 'date_format:Y-m-d', 'before_or_equal:today'],
+            'milk_weight'         => ['required', 'numeric', 'min:0.01'],
+            'fat_in_percentage'   => ['required', 'numeric', 'min:0', 'max:15'],
+            'rate_per_liter'      => ['required', 'numeric', 'min:0'],
+        ]);   // Laravel’s built‑in date & date_format rules expect YYYY‑MM‑DD :contentReference[oaicite:0]{index=0}
+
+        // 3. Business calculations ------------------------------------------
+        $validated['amount'] = round(
+            $validated['milk_weight'] * $validated['rate_per_liter'],
+            2
+        );
+
+        $validated['total_amount'] = MilkDairy::where(
+            'customer_no_in_dairy',
+            $validated['customer_no_in_dairy']
+        )->sum('amount') + $validated['amount'];
+
+        // 4. Persist ---------------------------------------------------------
+        // Cast the string date into a Carbon instance so Eloquent fills created_at
+        $validated['created_at'] = Carbon::createFromFormat('Y-m-d', $validated['created_at']);
 
         MilkDairy::create($validated);
 
-        return redirect()->route('milk_dairy.summary')
+        return redirect()
+            ->route('milk_dairy.summary')
             ->with('success', 'Milk entry added successfully.');
     }
 
@@ -89,6 +159,7 @@ class MilkDairyController extends Controller
         $validated = $request->validate([
             'customer_no_in_dairy' => ['required', 'numeric'],
             'shift'               => ['required', 'in:Morning,Evening'],
+            'created_at'          => ['required', 'date', 'date_format:Y-m-d', 'before_or_equal:today'],
             'milk_weight'          => ['required', 'numeric', 'min:0.01'],
             'fat_in_percentage'    => ['required', 'numeric', 'min:0', 'max:15'],
             'rate_per_liter'       => ['required', 'numeric', 'min:0'],

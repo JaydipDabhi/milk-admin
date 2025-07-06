@@ -31,31 +31,6 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
-                    {{-- <!-- Cow Milk -->
-                    <div class="col-lg-3 col-6">
-                        <div class="small-box bg-info text-white">
-                            <div class="inner">
-                                <h3>{{ number_format($cowMilkSales, 2) }} L</h3>
-                                <p>Cow Milk Sales (This Year)</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-hippo"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Buffalo Milk -->
-                    <div class="col-lg-3 col-6">
-                        <div class="small-box bg-primary text-white">
-                            <div class="inner">
-                                <h3>{{ number_format($buffaloMilkSales, 2) }} L</h3>
-                                <p>Buffalo Milk Sales (This Year)</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-hippo"></i>
-                            </div>
-                        </div>
-                    </div> --}}
                     <!-- Cow Milk -->
                     <div class="col-lg-3 col-6">
                         <div class="small-box bg-info text-white">
@@ -103,15 +78,15 @@
                         </div>
                     </div>
 
-                    <!-- Butter Sales -->
+                    <!-- Grand Total (Revenue + Dairy) -->
                     <div class="col-lg-3 col-6">
-                        <div class="small-box bg-secondary text-white">
+                        <div class="small-box bg-gradient-success text-white">
                             <div class="inner">
-                                <h3>{{ number_format($butterSales, 2) }} Kg</h3>
-                                <p>Butter Sales (This Year)</p>
+                                <h3>₹ {{ number_format($grandTotal, 2) }}</h3>
+                                <p>Grand Total (Milk + Ghee + Dairy)</p>
                             </div>
                             <div class="icon">
-                                <i class="fas fa-hippo"></i>
+                                <i class="fas fa-coins"></i>
                             </div>
                         </div>
                     </div>
@@ -121,7 +96,20 @@
                         <div class="small-box bg-success text-white">
                             <div class="inner">
                                 <h3>₹ {{ number_format($totalRate, 2) }}</h3>
-                                <p>Total Revenue (This Year)</p>
+                                <p>Total Milk Revenue (This Year)</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-rupee-sign"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dairy Total Amount -->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-gradient-indigo text-white">
+                            <div class="inner">
+                                <h3>₹ {{ number_format($totalMilkRevenue, 2) }}</h3>
+                                <p>Total Dairy Revenue (This Year)</p>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-rupee-sign"></i>

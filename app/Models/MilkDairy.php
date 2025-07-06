@@ -15,5 +15,6 @@ class MilkDairy extends Model
         'rate_per_liter',
         'amount',
         'total_amount',
+        'created_at',
     ];
 }
