@@ -11,28 +11,13 @@ use Illuminate\Support\Facades\Redirect;
 
 class MilkDairyController extends Controller
 {
-    // public function summary()
-    // {
-    //     $entries = MilkDairy::all();
-    //     $totalsByCustomer = MilkDairy::select('customer_no_in_dairy', DB::raw('SUM(amount) as total_amount'))
-    //         ->groupBy('customer_no_in_dairy')
-    //         ->get();
-    //     $subTotalAmount = $totalsByCustomer->sum('total_amount');
-    //     return view('milk-dairy.summary', compact('entries', 'totalsByCustomer', 'subTotalAmount'));
-    // }
     public function summary()
     {
         $entries = MilkDairy::all();
-
-        // Totals per customer
         $totalsByCustomer = MilkDairy::select('customer_no_in_dairy', DB::raw('SUM(amount) as total_amount'))
             ->groupBy('customer_no_in_dairy')
             ->get();
-
-        // Subtotal amount for all customers
         $subTotalAmount = $totalsByCustomer->sum('total_amount');
-
-        // Calculated totals
         $totalMilk = $entries->sum('milk_weight');
         $totalFat = $entries->sum('fat_in_percentage');
         $totalRate = $entries->sum('rate_per_liter');
@@ -59,38 +44,14 @@ class MilkDairyController extends Controller
         return view('milk-dairy.milk-dairy-add');
     }
 
-    // public function store(Request $request)
-    // {
-    //     if (Auth::user()->role !== 'Super Admin') {
-    //         return redirect()->route('milk_dairy.summary')->with('error', 'You are not authorized to store dairy data.');
-    //     }
-    //     $validated = $request->validate([
-    //         'customer_no_in_dairy' => ['required', 'numeric'],
-    //         'milk_weight'          => ['required', 'numeric', 'min:0.01'],
-    //         'fat_in_percentage'    => ['required', 'numeric', 'min:0', 'max:15'],
-    //         'rate_per_liter'       => ['required', 'numeric', 'min:0'],
-    //     ]);
-
-    //     $validated['amount'] = round($validated['milk_weight'] * $validated['rate_per_liter'], 2);
-    //     $prevTotal = MilkDairy::where('customer_no_in_dairy', $validated['customer_no_in_dairy'])
-    //         ->sum('amount');
-    //     $validated['total_amount'] = $prevTotal + $validated['amount'];
-
-    //     MilkDairy::create($validated);
-
-    //     return redirect()->route('milk_dairy.summary')
-    //         ->with('success', 'Milk entry added successfully.');
-    // }
     public function store(Request $request)
     {
-        // 1. Authorisation ---------------------------------------------------
         if (Auth::user()->role !== 'Super Admin') {
             return redirect()
                 ->route('milk_dairy.summary')
                 ->with('error', 'You are not authorized to store dairy data.');
         }
 
-        // 2. Validation ------------------------------------------------------
         $validated = $request->validate([
             'customer_no_in_dairy' => ['required', 'numeric', 'min:1'],
             'shift'               => ['required', 'in:Morning,Evening'],
@@ -98,9 +59,8 @@ class MilkDairyController extends Controller
             'milk_weight'         => ['required', 'numeric', 'min:0.01'],
             'fat_in_percentage'   => ['required', 'numeric', 'min:0', 'max:15'],
             'rate_per_liter'      => ['required', 'numeric', 'min:0'],
-        ]);   // Laravel’s built‑in date & date_format rules expect YYYY‑MM‑DD :contentReference[oaicite:0]{index=0}
+        ]);
 
-        // 3. Business calculations ------------------------------------------
         $validated['amount'] = round(
             $validated['milk_weight'] * $validated['rate_per_liter'],
             2
@@ -111,8 +71,6 @@ class MilkDairyController extends Controller
             $validated['customer_no_in_dairy']
         )->sum('amount') + $validated['amount'];
 
-        // 4. Persist ---------------------------------------------------------
-        // Cast the string date into a Carbon instance so Eloquent fills created_at
         $validated['created_at'] = Carbon::createFromFormat('Y-m-d', $validated['created_at']);
 
         MilkDairy::create($validated);
@@ -131,7 +89,6 @@ class MilkDairyController extends Controller
 
         $query = MilkDairy::where('customer_no_in_dairy', $request->customer_no);
 
-        // ignore the row we’re editing (if provided)
         if ($request->filled('exclude_id')) {
             $query->where('id', '!=', $request->exclude_id);
         }
@@ -168,7 +125,7 @@ class MilkDairyController extends Controller
         $validated['amount'] = round($validated['milk_weight'] * $validated['rate_per_liter'], 2);
 
         $prevTotal = MilkDairy::where('customer_no_in_dairy', $validated['customer_no_in_dairy'])
-            ->where('id', '!=', $milkDairy->id)        // exclude this entry
+            ->where('id', '!=', $milkDairy->id)
             ->sum('amount');
 
         $validated['total_amount'] = $prevTotal + $validated['amount'];
@@ -191,21 +148,29 @@ class MilkDairyController extends Controller
 
     public function ten_days_reports(Request $request)
     {
-        // Parse from GET or fallback to current month
-        $startDate = $request->input('start_date')
-            ? Carbon::parse($request->input('start_date'))->startOfDay()
+        $request->validate([
+            'start_date' => ['nullable', 'date', 'before_or_equal:today'],
+            'end_date'   => ['nullable', 'date', 'before_or_equal:today'],
+        ]);
+
+        $startDate = $request->filled('start_date')
+            ? Carbon::parse($request->start_date)->startOfDay()
             : Carbon::now()->startOfMonth();
 
-        $endDate = $request->input('end_date')
-            ? Carbon::parse($request->input('end_date'))->endOfDay()
+        $endDate = $request->filled('end_date')
+            ? Carbon::parse($request->end_date)->endOfDay()
             : Carbon::now()->endOfMonth();
 
-        // Fetch entries between the selected dates
+        if ($startDate->gt($endDate)) {
+            return back()
+                ->withErrors(['date_range' => 'Start date cannot be after end date.'])
+                ->withInput();
+        }
+
         $entries = MilkDairy::whereBetween('created_at', [$startDate, $endDate])
             ->orderBy('created_at')
             ->get();
 
-        // Group by 10-day segments
         $grouped = $entries->groupBy(function ($entry) {
             $day = Carbon::parse($entry->created_at)->day;
             return $day <= 10 ? '1-10'
