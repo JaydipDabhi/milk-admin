@@ -27,7 +27,12 @@ class MonthlyReportsController extends Controller
             ->pluck('year')
             ->toArray();
 
-        return view('monthly-reports.monthly-report-list', compact('customers', 'availableMonths', 'availableYears'));
+        return view('monthly-reports.monthly-report-list', [
+            'customers' => $customers,
+            'availableMonths' => $availableMonths,
+            'availableYears' => $availableYears,
+            'deliveries' => collect(),
+        ]);
     }
 
     public function generate_monthly_report(Request $request)
