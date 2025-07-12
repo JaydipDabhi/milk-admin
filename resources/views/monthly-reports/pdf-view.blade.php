@@ -10,7 +10,6 @@
         }
 
         body {
-            /* font-family: DejaVu Sans, sans-serif; */
             font-family: 'noto_sans_gujarati', DejaVu Sans, sans-serif;
             font-size: 15px;
             margin: 0;
@@ -70,7 +69,7 @@
 
                                 @foreach ($item['products'] as $product)
                                     {{ $product['type'] }}<br>
-                                    {{ number_format($product['shares'], 0) }} Shares<br>
+                                    {{ number_format($product['shares'], 1) }} Shares<br>
                                     × ₹ {{ number_format($product['rate'] / 2, 0) }} Rate<br>
                                     <hr class="divider">
                                     = <strong>₹ {{ number_format($product['total'], 2) }} Total</strong>
