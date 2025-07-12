@@ -51,16 +51,6 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="month">Month</label>
-                                        {{-- <select name="month"
-                                            class="form-control select2 @error('month') is-invalid @enderror">
-                                            <option value="">-- Select Month --</option>
-                                            @foreach (range(1, 12) as $m)
-                                                <option value="{{ $m }}"
-                                                    {{ request('month') == $m ? 'selected' : '' }}>
-                                                    {{ date('F', mktime(0, 0, 0, $m, 1)) }}
-                                                </option>
-                                            @endforeach
-                                        </select> --}}
                                         <select name="month"
                                             class="form-control select2 @error('month') is-invalid @enderror">
                                             <option value="">-- Select Month --</option>
@@ -81,16 +71,6 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="year">Year</label>
-                                        {{-- <select name="year"
-                                            class="form-control select2 @error('year') is-invalid @enderror">
-                                            <option value="">-- Select Year --</option>
-                                            @for ($y = now()->year; $y >= 2020; $y--)
-                                                <option value="{{ $y }}"
-                                                    {{ request('year') == $y ? 'selected' : '' }}>
-                                                    {{ $y }}
-                                                </option>
-                                            @endfor
-                                        </select> --}}
                                         <select name="year"
                                             class="form-control select2 @error('year') is-invalid @enderror">
                                             <option value="">-- Select Year --</option>
@@ -117,36 +97,73 @@
                     </form>
                 </div>
 
-                @isset($selectedCustomer)
-                    <div class="card card-success">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                <i class="fas fa-user"></i> Summary for {{ $selectedCustomer->customer_name }} –
-                                {{ date('F', mktime(0, 0, 0, $month, 1)) }} {{ $year }}
-                            </h3>
-                        </div>
-                        <div class="card-body">
-                            @php
-                                if ($totalMilk == 0.25) {
-                                    $totalShares = 0.5;
-                                } elseif ($totalMilk == 0.5) {
-                                    $totalShares = 1.0;
-                                } elseif ($totalMilk == 0.75) {
-                                    $totalShares = 1.5;
-                                } elseif ($totalMilk == 1.0) {
-                                    $totalShares = 2.0;
-                                } else {
-                                    $totalShares = $totalMilk * 2;
-                                }
-                            @endphp
-                            <p><strong>Total Milk:</strong> {{ number_format($totalMilk, 2) }} liters
-                                ({{ number_format($totalShares, 1) }} shares)</p>
-                            <p><strong>Total Amount:</strong> ₹{{ number_format($totalAmount, 2) }}</p>
-                        </div>
-                    </div>
-                @endisset
+                @if ($deliveries->isNotEmpty())
+                    @isset($selectedCustomer)
+                        <div class="card card-success">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-user"></i> Summary for {{ $selectedCustomer->customer_name }} –
+                                    {{ date('F', mktime(0, 0, 0, $month, 1)) }} {{ $year }}
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                @php
+                                    $typeSummary = [];
 
-                @if (!empty($deliveries))
+                                    foreach ($deliveries as $d) {
+                                        $type = strtolower($d->type);
+                                        $typeSummary[$type]['weight'] =
+                                            ($typeSummary[$type]['weight'] ?? 0) + $d->weight;
+                                        $typeSummary[$type]['amount'] =
+                                            ($typeSummary[$type]['amount'] ?? 0) + $d->total_rate;
+
+                                        if (!in_array($type, ['ghee', 'butter'])) {
+                                            if ($d->weight == 0.25) {
+                                                $shares = 0.5;
+                                            } elseif ($d->weight == 0.5) {
+                                                $shares = 1.0;
+                                            } elseif ($d->weight == 0.75) {
+                                                $shares = 1.5;
+                                            } elseif ($d->weight == 1.0) {
+                                                $shares = 2.0;
+                                            } else {
+                                                $shares = $d->weight * 2;
+                                            }
+
+                                            $typeSummary[$type]['shares'] =
+                                                ($typeSummary[$type]['shares'] ?? 0) + $shares;
+                                        }
+                                    }
+
+                                    $grandAmount = array_sum(array_column($typeSummary, 'amount'));
+                                @endphp
+
+                                @foreach ($typeSummary as $type => $info)
+                                    @php
+                                        $unit = in_array($type, ['ghee', 'butter']) ? 'kg' : 'liters';
+                                    @endphp
+                                    <p>
+                                        <strong>{{ ucfirst($type) }}:</strong>
+                                        {{ number_format($info['weight'], 2) }} {{ $unit }}
+                                        @if (!in_array($type, ['ghee', 'butter']))
+                                            ({{ number_format($info['shares'], 1) }} shares)
+                                        @endif
+                                        – ₹{{ number_format($info['amount'], 2) }}
+                                    </p>
+                                @endforeach
+
+                                <p><strong>Grand Total Amount:</strong> ₹{{ number_format($grandAmount, 2) }}</p>
+                            </div>
+                        </div>
+                    @endisset
+                @else
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle"></i> No delivery records found for this customer in the selected month
+                        and year.
+                    </div>
+                @endif
+
+                @if ($deliveries->isNotEmpty())
                     <div class="card">
                         <div class="card-header bg-info">
                             <h3 class="card-title text-white"><i class="fas fa-list"></i> Detailed Deliveries</h3>
@@ -194,7 +211,16 @@
                                         <tr>
                                             <td>{{ \Carbon\Carbon::parse($entry->created_at)->format('d-m-Y') }}</td>
                                             <td>{{ ucfirst($entry->type) }}</td>
-                                            <td>{{ number_format($weight, 2) }} L ({{ number_format($shares, 1) }} shares)
+                                            <td>
+                                                @php
+                                                    $unit = in_array(strtolower($entry->type), ['ghee', 'butter'])
+                                                        ? 'Kg'
+                                                        : 'L';
+                                                @endphp
+                                                {{ number_format($weight, 2) }} {{ $unit }}
+                                                @if (!in_array(strtolower($entry->type), ['ghee', 'butter']))
+                                                    ({{ number_format($shares, 1) }} shares)
+                                                @endif
                                             </td>
                                             <td>₹{{ number_format($rate, 2) }}</td>
                                             <td>₹{{ number_format($amount, 2) }}</td>
@@ -202,16 +228,58 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                @php
+                                    $typeSummary = [];
+
+                                    foreach ($deliveries as $d) {
+                                        $type = strtolower($d->type);
+                                        $typeSummary[$type]['weight'] =
+                                            ($typeSummary[$type]['weight'] ?? 0) + $d->weight;
+                                        $typeSummary[$type]['amount'] =
+                                            ($typeSummary[$type]['amount'] ?? 0) + $d->total_rate;
+
+                                        // Shares for non-kg items only
+                                        if (!in_array($type, ['ghee', 'butter'])) {
+                                            if ($d->weight == 0.25) {
+                                                $shares = 0.5;
+                                            } elseif ($d->weight == 0.5) {
+                                                $shares = 1.0;
+                                            } elseif ($d->weight == 0.75) {
+                                                $shares = 1.5;
+                                            } elseif ($d->weight == 1.0) {
+                                                $shares = 2.0;
+                                            } else {
+                                                $shares = $d->weight * 2;
+                                            }
+                                            $typeSummary[$type]['shares'] =
+                                                ($typeSummary[$type]['shares'] ?? 0) + $shares;
+                                        }
+                                    }
+
+                                    $grandTotal = array_sum(array_column($typeSummary, 'amount'));
+                                @endphp
+
                                 <tfoot class="bg-light">
                                     <tr>
                                         <th colspan="2" class="text-right">Total:</th>
-                                        <th>{{ number_format($totalWeight, 2) }} L ({{ number_format($totalShares, 1) }}
-                                            shares)</th>
-                                        <th></th>
-                                        <th>₹{{ number_format($grandTotal, 2) }}</th>
-                                        <th></th>
+                                        <th colspan="2">
+                                            @foreach ($typeSummary as $type => $info)
+                                                @php
+                                                    $unit = in_array($type, ['ghee', 'butter']) ? 'Kg' : 'L';
+                                                    $label = ucfirst($type);
+                                                @endphp
+                                                {{ $label }}: {{ number_format($info['weight'], 2) }}
+                                                {{ $unit }}
+                                                @if (!in_array($type, ['ghee', 'butter']) && isset($info['shares']))
+                                                    ({{ number_format($info['shares'], 1) }} shares)
+                                                @endif
+                                                <br>
+                                            @endforeach
+                                        </th>
+                                        <th colspan="2">₹{{ number_format($grandTotal, 2) }}</th>
                                     </tr>
                                 </tfoot>
+
                             </table>
                         </div>
                     </div>
