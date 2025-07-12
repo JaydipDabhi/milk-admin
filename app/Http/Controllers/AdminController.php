@@ -24,42 +24,59 @@ class AdminController extends Controller
 
         $year = Carbon::now()->year;
 
-        // Total liters sold this year
+        // Cow milk
         $cowMilkSales = MilkDelivery::where('type', 'cow')
             ->whereYear('created_at', $year)
             ->sum('weight');
 
+        $cowMilkRevenue = MilkDelivery::where('type', 'cow')
+            ->whereYear('created_at', $year)
+            ->sum(DB::raw('weight * rate'));
+
+        // Buffalo milk
         $buffaloMilkSales = MilkDelivery::where('type', 'buffalo')
             ->whereYear('created_at', $year)
             ->sum('weight');
 
+        $buffaloMilkRevenue = MilkDelivery::where('type', 'buffalo')
+            ->whereYear('created_at', $year)
+            ->sum(DB::raw('weight * rate'));
+
+        // Ghee
         $gheeSales = MilkDelivery::where('type', 'ghee')
             ->whereYear('created_at', $year)
             ->sum('weight');
 
-        // Total revenue (cow + buffalo)
-        $totalRate = MilkDelivery::whereYear('created_at', $year)
-            ->select(DB::raw('SUM(weight * rate) as total'))
-            ->value('total');
+        $gheeRevenue = MilkDelivery::where('type', 'ghee')
+            ->whereYear('created_at', $year)
+            ->sum(DB::raw('weight * rate'));
 
+        // Combined cow + buffalo revenue
+        $totalRate = $cowMilkRevenue + $buffaloMilkRevenue;
+
+        // Additional data
         $customerCount = Customer::count();
-        $userCount = User::where('role', '!=', 'Super Admin')->count();
 
-        $totalMilkRevenue = MilkDairy::whereYear('created_at', now()->year)->sum('amount');
+        // Milk Dairy revenue
+        $totalMilkRevenue = MilkDairy::whereYear('created_at', $year)->sum('amount');
 
-        $grandTotal = $totalRate + $totalMilkRevenue;
+        // Grand total = milk (cow + buffalo) + ghee + dairy
+        $grandTotal = $cowMilkRevenue + $buffaloMilkRevenue + $gheeRevenue + $totalMilkRevenue;
 
         return view('dashboard.dashboard', [
             'cowMilkSales' => $cowMilkSales,
             'buffaloMilkSales' => $buffaloMilkSales,
             'gheeSales' => $gheeSales,
+            'cowMilkRevenue' => $cowMilkRevenue,
+            'buffaloMilkRevenue' => $buffaloMilkRevenue,
+            'gheeRevenue' => $gheeRevenue,
             'totalRate' => $totalRate,
             'customerCount' => $customerCount,
             'grandTotal' => $grandTotal,
-            'userCount' => $userCount,
             'totalMilkRevenue' => $totalMilkRevenue,
         ]);
     }
+
 
     public function register()
     {
