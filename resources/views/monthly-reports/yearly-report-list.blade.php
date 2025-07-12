@@ -34,10 +34,14 @@
                             <div class="form-row">
                                 <div class="form-group col-md-4 mb-2">
                                     <label for="year">Select Year</label>
-                                    <input type="number" name="year" id="year"
-                                        class="form-control @error('year') is-invalid @enderror"
-                                        value="{{ old('year', $year ?? date('Y')) }}" min="2000"
-                                        max="{{ date('Y') }}">
+                                    <select name="year" id="year"
+                                        class="form-control select2 @error('year') is-invalid @enderror">
+                                        <option value="">-- Select Year --</option>
+                                        <option value="{{ date('Y') }}"
+                                            {{ old('year', $year ?? '') == date('Y') ? 'selected' : '' }}>
+                                            {{ date('Y') }}
+                                        </option>
+                                    </select>
                                     @error('year')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -174,9 +178,6 @@
                 rules: {
                     year: {
                         required: true,
-                        digits: true,
-                        min: 2000,
-                        max: new Date().getFullYear()
                     },
                     type: {
                         required: true
@@ -184,10 +185,7 @@
                 },
                 messages: {
                     year: {
-                        required: "Please enter a year",
-                        digits: "Please enter a valid numeric year",
-                        min: "Year must be 2000 or later",
-                        max: "Year cannot be in the future"
+                        required: "Please enter a year"
                     },
                     type: {
                         required: "Please select a type"

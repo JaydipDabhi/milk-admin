@@ -51,7 +51,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="month">Month</label>
-                                        <select name="month"
+                                        {{-- <select name="month"
                                             class="form-control select2 @error('month') is-invalid @enderror">
                                             <option value="">-- Select Month --</option>
                                             @foreach (range(1, 12) as $m)
@@ -60,7 +60,18 @@
                                                     {{ date('F', mktime(0, 0, 0, $m, 1)) }}
                                                 </option>
                                             @endforeach
+                                        </select> --}}
+                                        <select name="month"
+                                            class="form-control select2 @error('month') is-invalid @enderror">
+                                            <option value="">-- Select Month --</option>
+                                            @foreach ($availableMonths as $m)
+                                                <option value="{{ $m }}"
+                                                    {{ request('month') == $m ? 'selected' : '' }}>
+                                                    {{ date('F', mktime(0, 0, 0, $m, 1)) }}
+                                                </option>
+                                            @endforeach
                                         </select>
+
                                         @error('month')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -70,7 +81,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="year">Year</label>
-                                        <select name="year"
+                                        {{-- <select name="year"
                                             class="form-control select2 @error('year') is-invalid @enderror">
                                             <option value="">-- Select Year --</option>
                                             @for ($y = now()->year; $y >= 2020; $y--)
@@ -79,7 +90,18 @@
                                                     {{ $y }}
                                                 </option>
                                             @endfor
+                                        </select> --}}
+                                        <select name="year"
+                                            class="form-control select2 @error('year') is-invalid @enderror">
+                                            <option value="">-- Select Year --</option>
+                                            @foreach ($availableYears as $y)
+                                                <option value="{{ $y }}"
+                                                    {{ request('year') == $y ? 'selected' : '' }}>
+                                                    {{ $y }}
+                                                </option>
+                                            @endforeach
                                         </select>
+
                                         @error('year')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -211,7 +233,7 @@
                 responsive: true,
                 autoWidth: false,
                 ordering: true,
-                pageLength: 10,
+                pageLength: 100,
             });
 
             // jQuery Validation for the filter form

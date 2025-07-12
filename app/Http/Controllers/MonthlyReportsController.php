@@ -16,7 +16,18 @@ class MonthlyReportsController extends Controller
     public function monthly_report_form()
     {
         $customers = Customer::all();
-        return view('monthly-reports.monthly-report-list', compact('customers'));
+
+        $availableMonths = MilkDelivery::selectRaw('DISTINCT MONTH(created_at) as month')
+            ->orderBy('month', 'asc')
+            ->pluck('month')
+            ->toArray();
+
+        $availableYears = MilkDelivery::selectRaw('DISTINCT YEAR(created_at) as year')
+            ->orderBy('year', 'desc')
+            ->pluck('year')
+            ->toArray();
+
+        return view('monthly-reports.monthly-report-list', compact('customers', 'availableMonths', 'availableYears'));
     }
 
     public function generate_monthly_report(Request $request)
@@ -34,6 +45,7 @@ class MonthlyReportsController extends Controller
         $deliveries = MilkDelivery::where('customer_id', $customer->id)
             ->whereMonth('created_at', $month)
             ->whereYear('created_at', $year)
+            ->orderBy('created_at', 'desc')
             ->get();
 
         $totals = $deliveries->reduce(function ($carry, $item) {
@@ -41,6 +53,16 @@ class MonthlyReportsController extends Controller
             $carry['amount'] += $item->total_rate;
             return $carry;
         }, ['milk' => 0, 'amount' => 0]);
+
+        $availableMonths = MilkDelivery::selectRaw('DISTINCT MONTH(created_at) as month')
+            ->orderBy('month', 'asc')
+            ->pluck('month')
+            ->toArray();
+
+        $availableYears = MilkDelivery::selectRaw('DISTINCT YEAR(created_at) as year')
+            ->orderBy('year', 'desc')
+            ->pluck('year')
+            ->toArray();
 
         return view('monthly-reports.monthly-report-list', [
             'customers' => Customer::all(),
@@ -50,6 +72,8 @@ class MonthlyReportsController extends Controller
             'selectedCustomer' => $customer,
             'month' => $month,
             'year' => $year,
+            'availableMonths' => $availableMonths,
+            'availableYears' => $availableYears,
         ]);
     }
 
@@ -64,14 +88,14 @@ class MonthlyReportsController extends Controller
         $types = RateMaster::select('rate_type')->distinct()->pluck('rate_type');
 
         $validated = $request->validate([
-            'year' => 'required|integer|min:2000|max:' . date('Y'),
+            'year' => 'required|integer|in:' . date('Y'),
             'type' => 'required|in:' . $types->implode(','),
         ]);
 
         $year = $validated['year'];
         $type = $validated['type'];
 
-        $data = \App\Models\MilkDelivery::whereYear('created_at', $year)
+        $data = MilkDelivery::whereYear('created_at', $year)
             ->where('type', $type)
             ->get();
 
