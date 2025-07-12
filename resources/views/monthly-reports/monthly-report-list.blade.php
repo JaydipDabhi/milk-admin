@@ -192,7 +192,7 @@
                                             $totalShares += $shares;
                                         @endphp
                                         <tr>
-                                            <td>{{ \Carbon\Carbon::parse($entry->created_at)->format('d M Y') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($entry->created_at)->format('d-m-Y') }}</td>
                                             <td>{{ ucfirst($entry->type) }}</td>
                                             <td>{{ number_format($weight, 2) }} L ({{ number_format($shares, 1) }} shares)
                                             </td>
@@ -233,6 +233,9 @@
                 responsive: true,
                 autoWidth: false,
                 ordering: true,
+                order: [
+                    [0, 'desc']
+                ],
                 pageLength: 100,
             });
 
