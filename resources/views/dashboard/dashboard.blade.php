@@ -104,6 +104,32 @@
                         </div>
                     </div>
 
+                    <!-- Milk Weight (From Dairy) -->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-gradient-indigo text-white">
+                            <div class="inner">
+                                <h3>{{ number_format($milkWeightFromDairy, 2) }} L</h3>
+                                <p>Milk Weight (From Dairy)</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-weight"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dairy Total Amount -->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-gradient-indigo text-white">
+                            <div class="inner">
+                                <h3>₹ {{ number_format($totalMilkRevenue, 2) }}</h3>
+                                <p>Total Dairy Revenue (This Year)</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-rupee-sign"></i>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Ghee Sales -->
                     <div class="col-lg-3 col-6">
                         <div class="small-box bg-warning text-white">
@@ -130,18 +156,7 @@
                         </div>
                     </div>
 
-                    <!-- Dairy Total Amount -->
-                    <div class="col-lg-3 col-6">
-                        <div class="small-box bg-gradient-indigo text-white">
-                            <div class="inner">
-                                <h3>₹ {{ number_format($totalMilkRevenue, 2) }}</h3>
-                                <p>Total Dairy Revenue (This Year)</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-rupee-sign"></i>
-                            </div>
-                        </div>
-                    </div>
+
 
                     <!-- Grand Total (Revenue + Dairy) -->
                     <div class="col-lg-3 col-6">

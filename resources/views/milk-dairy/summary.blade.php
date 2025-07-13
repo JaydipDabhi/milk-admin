@@ -11,6 +11,7 @@
                 </ol>
             </div>
         </section>
+
         <section class="content">
             <div class="container-fluid">
                 @php
@@ -31,6 +32,68 @@
                 @endforeach
             </div>
         </section>
+
+        {{-- Summary Boxes --}}
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- Total Milk -->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3>{{ number_format($totalMilk, 2) }}<sup style="font-size: 20px"> L</sup></h3>
+                                <p>Total Milk Collected</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Average Fat -->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h3>{{ number_format($entryCount ? $totalFat / $entryCount : 0, 2) }}<sup
+                                        style="font-size: 20px">%</sup></h3>
+                                <p>Average Fat %</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-percent"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Average Rate -->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3>₹{{ number_format($entryCount ? $totalRate / $entryCount : 0, 2) }}</h3>
+                                <p>Average Rate/Liter</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-rupee-sign"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Amount -->
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-danger">
+                            <div class="inner">
+                                <h3>₹{{ number_format($totalAmount, 2) }}</h3>
+                                <p>Total Amount</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {{-- Totals by Customer Table --}}
         @if ($totalsByCustomer->count())
             <section class="content">
                 <div class="container-fluid">
@@ -69,6 +132,8 @@
                 </div>
             </section>
         @endif
+
+        {{-- Detailed Entry Table --}}
         <section class="content">
             <div class="container-fluid">
                 <div class="card">
@@ -77,7 +142,6 @@
                             <div class="col-12 col-md-6 mb-2 mb-md-0 text-md-left text-center">
                                 <h3 class="card-title mb-0">Milk Dairy Summary</h3>
                             </div>
-
                             <div class="col-12 col-md-6 text-md-right text-center">
                                 <a href="{{ route('milk_dairy.create') }}" class="btn btn-primary">
                                     <i class="fas fa-user-plus mr-1"></i> Add Daily Entry
@@ -115,16 +179,16 @@
                                         <td>{{ $entry->amount }}</td>
                                         <td>{{ $entry->total_amount }}</td>
                                         <td>
-                                            <a href="{{ route('milk_dairy.edit', $entry) }}"
-                                                class="btn btn-sm btn-warning">
+                                            <a href="{{ route('milk_dairy.edit', $entry) }}" class="btn btn-sm btn-warning"
+                                                data-toggle="tooltip" title="Edit Entry">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <form action="{{ route('milk_dairy.destroy', $entry) }}" method="POST"
                                                 class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="btn btn-sm btn-danger"
-                                                    onclick="confirmDairyDelete({{ $entry->id }})">
+                                                <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip"
+                                                    title="Delete Entry" onclick="confirmDairyDelete({{ $entry->id }})">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
@@ -149,3 +213,11 @@
         </section>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+@endpush

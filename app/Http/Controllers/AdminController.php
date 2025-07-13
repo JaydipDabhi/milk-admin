@@ -59,6 +59,7 @@ class AdminController extends Controller
 
         // Milk Dairy revenue
         $totalMilkRevenue = MilkDairy::whereYear('created_at', $year)->sum('amount');
+        $milkWeightFromDairy = MilkDairy::whereYear('created_at', $year)->sum('milk_weight');
 
         // Grand total = milk (cow + buffalo) + ghee + dairy
         $grandTotal = $cowMilkRevenue + $buffaloMilkRevenue + $gheeRevenue + $totalMilkRevenue;
@@ -74,6 +75,7 @@ class AdminController extends Controller
             'customerCount' => $customerCount,
             'grandTotal' => $grandTotal,
             'totalMilkRevenue' => $totalMilkRevenue,
+            'milkWeightFromDairy' => $milkWeightFromDairy,
         ]);
     }
 
