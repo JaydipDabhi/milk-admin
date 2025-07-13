@@ -175,7 +175,7 @@
 @push('scripts')
     <script>
         $('.datatable').DataTable({
-            pageLength: 10,
+            pageLength: 50,
             ordering: true,
             order: [
                 [1, 'desc']
