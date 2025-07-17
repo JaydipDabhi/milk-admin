@@ -30,9 +30,14 @@
                             <h3 class="card-title mb-0">
                                 <i class="fas fa-chart-line"></i> Milk Type Summary Report
                             </h3>
-                            <button class="btn btn-light btn-sm d-print-none" onclick="printReportTable()">
+                            {{-- <button class="btn btn-light btn-sm d-print-none" onclick="printReportTable()">
                                 <i class="fas fa-print"></i> Print Report
-                            </button>
+                            </button> --}}
+                            <a href="{{ route('reports.full-reports.pdf') }}"
+                                class="btn btn-danger btn-sm float-right d-print-none">
+                                <i class="fas fa-file-pdf"></i> Download PDF
+                            </a>
+
                         </div>
                     </div>
 
@@ -52,7 +57,7 @@
                                             <th>Total Amount (₹)</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    {{-- <tbody>
                                         @php
                                             $grandAmount = 0;
                                         @endphp
@@ -78,7 +83,46 @@
                                             <td colspan="3">Total Across All Types</td>
                                             <td>₹{{ number_format($grandAmount, 2) }}</td>
                                         </tr>
+                                    </tfoot> --}}
+                                    <tbody>
+                                        @php $grandAmount = 0; @endphp
+
+                                        {{-- Type-wise summary --}}
+                                        @foreach ($summary as $type => $data)
+                                            @php $grandAmount += $data['total_amount']; @endphp
+                                            <tr>
+                                                <td>{{ ucfirst($type) }}</td>
+                                                <td>₹{{ number_format($data['rate'], 2) }}</td>
+                                                <td>
+                                                    {{ number_format($data['total_weight'], 2) }} {{ $data['unit'] }}
+                                                    @if (!is_null($data['shares']))
+                                                        ({{ number_format($data['shares'], 1) }} shares)
+                                                    @endif
+                                                </td>
+                                                <td>₹{{ number_format($data['total_amount'], 2) }}</td>
+                                            </tr>
+                                        @endforeach
+
+                                        {{-- Per-customer summary --}}
+                                        @foreach ($customerSummaries as $custNo => $data)
+                                            @php $grandAmount += $data['amount']; @endphp
+                                            <tr>
+                                                <td>{{ $custNo }}</td>
+                                                <td>-</td>
+                                                <td>{{ number_format($data['weight'], 2) }} L
+                                                    ({{ number_format($data['shares'], 1) }} shares)
+                                                </td>
+                                                <td>₹{{ number_format($data['amount'], 2) }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                    <tfoot class="font-weight-bold bg-light">
+                                        <tr>
+                                            <td colspan="3">Total Across All Types</td>
+                                            <td>₹{{ number_format($grandAmount, 2) }}</td>
+                                        </tr>
                                     </tfoot>
+
                                 </table>
                             </div>
                         @endif

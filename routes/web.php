@@ -107,6 +107,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/yearly/generate', [MonthlyReportsController::class, 'generate_yearly_report'])->name('generate_yearly_report');
 
         Route::get('/full-reports', [MonthlyReportsController::class, 'full_reports'])->name('full_reports');
+        Route::get('/full-reports/pdf', [MonthlyReportsController::class, 'downloadFullReportPdf'])->name('full-reports.pdf');
         Route::get('/print-reports', [MonthlyReportsController::class, 'print_reports'])->name('print_reports');
         Route::get('/print-reports/pdf', [MonthlyReportsController::class, 'download_pdf'])->name('print_reports_pdf');
     });

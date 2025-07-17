@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\MilkDairy;
 use App\Models\MilkDelivery;
 use App\Models\RateMaster;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -115,35 +116,19 @@ class MonthlyReportsController extends Controller
         return view('monthly-reports.yearly-report-list', compact('types', 'year', 'type', 'monthly'));
     }
 
-    public function full_reports()
+    private function generateFullReportData(array $customerIds = [108, 1108])
     {
         $rateMasters = RateMaster::all();
         $summary = [];
 
         foreach ($rateMasters as $rate) {
             $type = strtolower($rate->rate_type);
-
             $deliveries = MilkDelivery::where('type', $type)->get();
 
             $total_weight = $deliveries->sum('weight');
             $total_amount = $deliveries->sum('total_rate');
 
-            if (in_array($type, ['cow', 'buffalo'])) {
-                if ($total_weight == 0.25) {
-                    $shares = 0.5;
-                } elseif ($total_weight == 0.5) {
-                    $shares = 1.0;
-                } elseif ($total_weight == 0.75) {
-                    $shares = 1.5;
-                } elseif ($total_weight == 1.0) {
-                    $shares = 2.0;
-                } else {
-                    $shares = $total_weight * 2;
-                }
-            } else {
-                $shares = null;
-            }
-
+            $shares = in_array($type, ['cow', 'buffalo']) ? $total_weight * 2 : null;
             $unit = in_array($type, ['ghee', 'butter']) ? 'kg' : 'L';
 
             $summary[$type] = [
@@ -155,7 +140,38 @@ class MonthlyReportsController extends Controller
             ];
         }
 
-        return view('monthly-reports.full-reports', compact('summary'));
+        // Preload all dairy entries for given customers in one query
+        $milkDairyRecords = MilkDairy::whereIn('customer_no_in_dairy', $customerIds)->get();
+
+        $customerSummaries = [];
+        foreach ($customerIds as $custNo) {
+            $records = $milkDairyRecords->where('customer_no_in_dairy', $custNo);
+
+            $weight = $records->sum('milk_weight');
+            $amount = $records->sum('amount');
+            $shares = $weight * 2;
+
+            $customerSummaries[$custNo] = [
+                'weight' => $weight,
+                'shares' => $shares,
+                'amount' => $amount,
+            ];
+        }
+
+        return compact('summary', 'customerSummaries');
+    }
+
+    public function full_reports()
+    {
+        $data = $this->generateFullReportData();
+        return view('monthly-reports.full-reports', $data);
+    }
+
+    public function downloadFullReportPdf()
+    {
+        $data = $this->generateFullReportData();
+        $pdf = Pdf::loadView('monthly-reports.full-reports-pdf', $data);
+        return $pdf->download('full_report.pdf');
     }
 
     public function print_reports(Request $request)
