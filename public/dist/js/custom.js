@@ -6,7 +6,7 @@ $(function () {
             autoWidth: false,
             pageLength: 100,
             order: [[0, "desc"]],
-            buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+            buttons: ["excel", "pdf", "print"],
         })
         .buttons()
         .container()
