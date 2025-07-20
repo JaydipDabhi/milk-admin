@@ -169,7 +169,7 @@
                             <h3 class="card-title text-white"><i class="fas fa-list"></i> Detailed Deliveries</h3>
                         </div>
                         <div class="card-body">
-                            <table id="reportTable" class="table table-bordered table-striped">
+                            <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th>Date</th>
@@ -293,20 +293,6 @@
 @push('scripts')
     <script>
         $(function() {
-            $('.select2').select2({
-                width: '100%'
-            });
-
-            $('#reportTable').DataTable({
-                responsive: true,
-                autoWidth: false,
-                ordering: true,
-                order: [
-                    [0, 'desc']
-                ],
-                pageLength: 100,
-            });
-
             // jQuery Validation for the filter form
             $('#monthlyForm').first().validate({
                 rules: {

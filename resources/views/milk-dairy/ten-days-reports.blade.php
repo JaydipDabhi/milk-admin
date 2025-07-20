@@ -131,7 +131,8 @@
 
                                 {{-- Table --}}
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-sm table-hover text-center mb-0 datatable">
+                                    <table class="table table-bordered table-sm table-hover text-center mb-0"
+                                        id="example1">
                                         <thead class="thead-light">
                                             <tr>
                                                 <th>#</th>
@@ -171,16 +172,3 @@
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $('.datatable').DataTable({
-            pageLength: 50,
-            ordering: true,
-            order: [
-                [1, 'desc']
-            ],
-            responsive: true
-        });
-    </script>
-@endpush

@@ -2,8 +2,9 @@ $(function () {
     $("#example1")
         .DataTable({
             responsive: true,
-            lengthChange: false,
+            lengthChange: true,
             autoWidth: false,
+            pageLength: 100,
             order: [[0, "desc"]],
             buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
         })
@@ -18,6 +19,7 @@ $(function () {
         info: true,
         autoWidth: false,
         responsive: true,
+        pageLength: 100,
     });
     $(".select2").select2();
 });
